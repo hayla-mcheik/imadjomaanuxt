@@ -315,8 +315,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   color: #fff;
   transition: all 0.3s ease;
@@ -325,7 +325,9 @@ onMounted(() => {
 .social-icons a:hover {
   color: red;
 }
-
+.social-icons a i {
+  font-size: 16px;
+}
 /* Content Area */
 .content-area {
   flex-grow: 1;

@@ -29,7 +29,7 @@
         </div>
 
         <!-- Social Icons Column -->
-        <div class="lg:col-span-1  d-md-none d-lg-flex flex justify-center lg:justify-start lg:flex-col lg:items-end lg:space-y-6">
+        <!-- <div class="lg:col-span-1  d-md-none d-lg-flex flex justify-center lg:justify-start lg:flex-col lg:items-end lg:space-y-6">
           <div class="social-icons flex lg:flex-col space-x-4 lg:space-x-0 lg:space-y-6">
             <a to="https://facebook.com" target="_blank" class="social-icon animate-bounce delay-100 ">
              <img src="/assets/images/facebook.png" class="w-5"/>
@@ -44,7 +44,7 @@
 <img src="/assets/images/linkedin.png" class="w-5"/>
             </a>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 

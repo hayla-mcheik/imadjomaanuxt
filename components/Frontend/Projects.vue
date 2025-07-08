@@ -9,7 +9,7 @@
     <div class="container mx-auto relative z-10 m-0 p-0">
       <!-- Section Title -->
      <div class="section-title mb-12 px-4 max-w-8xl container ">
-        <h2 class="text-4xl md:text-5xl font-bold text-white">Our Company</h2>
+        <h2 class="text-4xl md:text-5xl font-bold text-white">JGroup's Company</h2>
       
       </div>
       <!-- Project Grid -->
