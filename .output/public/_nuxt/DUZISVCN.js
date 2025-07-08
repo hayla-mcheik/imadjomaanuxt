@@ -1,0 +1,1 @@
+import{P as o}from"./BrYNj2se.js";/* empty css        */import{_ as t}from"./CyKr4GrO.js";/* empty css        *//* empty css        *//* empty css        */import{u as r,c as a,b as e,F as m,o as s}from"./Cod1mvEu.js";import"./DB_7h5BP.js";const k={__name:"Company",setup(p){return r({title:"Home Page"}),(c,i)=>(s(),a(m,null,[e(t),e(o)],64))}};export{k as default};

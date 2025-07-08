@@ -1,0 +1,1 @@
+import{_ as t}from"./CyKr4GrO.js";import{E as a}from"./DMoinkqC.js";import{u as o,c as r,b as e,F as s,o as m}from"./Cod1mvEu.js";import"./DB_7h5BP.js";/* empty css        */const E={__name:"Events",setup(n){return o({title:"Home Page"}),(c,_)=>(m(),r(s,null,[e(t),e(a)],64))}};export{E as default};

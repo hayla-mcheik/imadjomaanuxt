@@ -1,0 +1,1 @@
+import{_ as e}from"./CyKr4GrO.js";import{u as t,k as a,o}from"./Cod1mvEu.js";import"./DB_7h5BP.js";const p={__name:"Contact",setup(r){return t({title:"Home Page"}),(s,_)=>(o(),a(e))}};export{p as default};
