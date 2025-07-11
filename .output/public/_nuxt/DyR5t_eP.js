@@ -1,1 +1,0 @@
-import{_ as a}from"./CyKr4GrO.js";import{N as t}from"./DGg-rVC7.js";import{u as o,c as r,b as e,F as s,o as m}from"./Cod1mvEu.js";import"./DB_7h5BP.js";/* empty css        */const N={__name:"News",setup(c){return o({title:"Home Page"}),(_,n)=>(m(),r(s,null,[e(a),e(t)],64))}};export{N as default};

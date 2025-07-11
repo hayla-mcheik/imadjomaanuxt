@@ -1,6 +1,8 @@
 <template>
-<Breadcrumbs />
+<div class="mt-5">
   <Projects />
+</div>
+
 
 </template>
 

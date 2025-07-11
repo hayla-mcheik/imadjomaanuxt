@@ -4,28 +4,22 @@
         <!-- Scrolling Ticker Start -->
         <div class="scrolling-ticker-box">
             <div class="scrolling-content">
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/Amazon ADS.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
+                <span><img src="/assets/images/loggoone.png" alt=""></span>
+                <span><img src="/assets/images/loggotwo.png" alt=""></span>
+                <span><img src="/assets/images/loggofour.png" alt=""></span>
+                <span><img src="/assets/images/loggofive.png" alt=""></span>
+                <span><img src="/assets/images/loggosix.png" alt=""></span>
+				                <span><img src="/assets/images/loggoone.png" alt=""></span>
+                <span><img src="/assets/images/loggotwo.png" alt=""></span>
 </div>
             <div class="scrolling-content">
-                         <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
-                <span><img src="/assets/images/promomedia-logo-black.png" alt=""></span>
+				                <span><img src="/assets/images/loggoone.png" alt=""></span>
+                <span><img src="/assets/images/loggotwo.png" alt=""></span>
+              <span><img src="/assets/images/loggoone.png" alt=""></span>
+                <span><img src="/assets/images/loggotwo.png" alt=""></span>
+                <span><img src="/assets/images/loggofour.png" alt=""></span>
+                <span><img src="/assets/images/loggofive.png" alt=""></span>
+                <span><img src="/assets/images/loggosix.png" alt=""></span>
             </div>
         </div>
         <!-- Scrolling Ticker End -->
@@ -40,7 +34,7 @@
 <style scoped>
 
 .our-scrolling-ticker{
-	background-color: var(--white-color);
+	background-color: var(--black-color);
 	padding: 26px 0;
 }
 
@@ -52,6 +46,7 @@
 	user-select: none;
 	gap: var(--gap);
 	align-items: center;
+	justify-content: center;
 }
 
 .scrolling-content{
@@ -69,11 +64,12 @@
 	line-height: 1.2em;
 	color: var(--dark-color);
 	vertical-align: middle;
+	margin: auto;
 }
 
 .scrolling-content span img{
 	width: 100%;
-	max-width: 100px;
+	max-width: 80px;
 	margin-right: 40px;
 }
 

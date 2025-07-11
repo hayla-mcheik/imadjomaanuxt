@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     'swiper/css',
     'swiper/css/effect-creative',
   ],
+  
   app: {
     head: {
       title: 'Promofix - Imad Jomaa',
@@ -32,8 +33,9 @@ export default defineNuxtConfig({
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         { 
           rel: 'stylesheet', 
-          href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap' 
+          href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"' 
         },
+    
         { 
           rel: 'stylesheet', 
           href: 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
@@ -93,6 +95,15 @@ export default defineNuxtConfig({
       crawlLinks: true
     }
   },
+  runtimeConfig: {
+        public: {
+            apiBase: process.env.API_BASE_URL || 'http://localhost:8000/api',
+        }
+    },
 
-  modules: ['nuxt-swiper']
+    modules: [
+        'nuxt-swiper',
+        '@pinia/nuxt',
+    ],
+
 })

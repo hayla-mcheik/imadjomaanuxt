@@ -39,9 +39,8 @@ const newsItems = ref([
     </div>
     
     <div class="container relative z-10 mx-auto px-4 max-w-7xl">
-      <div class="section-title mb-12 text-center">
-        <h2 class="text-4xl md:text-5xl font-bold text-white">Latest <span class="text-transparent bg-clip-text bg-white">News</span></h2>
-        <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Stay updated with our insights, achievements, and industry trends</p>
+      <div class="section-title mb-12">
+        <h2 class="text-xl md:text-xl font-bold text-white">Latest <span class="text-transparent bg-clip-text bg-white">News</span></h2>
       </div>
       
       <!-- News Grid -->

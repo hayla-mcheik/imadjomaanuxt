@@ -6,31 +6,24 @@
     <nav class="vertical-navbar hidden md:block">
       <div class="vertical-navbar-inner">
         <!-- Logo -->
-        <NuxtLink class="navbar-brand" to="/">
-          <img src="/assets/images/logo-imad.png" class="logo" alt="Logo">
+        <NuxtLink class="navbar-brand mt-4" to="/">
+          <img src="/assets/images/logooo.jpg" class="logo" alt="Logo">
         </NuxtLink>
         
         <!-- Vertical Menu -->
-        <ul class="vertical-menu">
-          <li class="bg-silver-gradient"><NuxtLink class="nav-link" to="#">Imad Jomaa</NuxtLink></li>
-          <li><NuxtLink class="nav-link" to="/about">My Story</NuxtLink></li>
-          <li><NuxtLink class="nav-link" to="/company">Companies</NuxtLink></li>
-          <li><NuxtLink class="nav-link" to="/technologies">Technologies</NuxtLink></li>
-          <li><NuxtLink class="nav-link" to="/events">Events</NuxtLink></li>
-                  <li><NuxtLink class="nav-link" to="/news">News</NuxtLink></li>
+        <ul class="vertical-menu pt-5">
+          <li class="bg-silver-gradient"><NuxtLink class="nav-link text-white" to="#">Imad Jomaa</NuxtLink></li>
+          <li><NuxtLink class="nav-link" to="/about" :class="{'active-link': $route.path === '/about'}">My Story</NuxtLink></li>
+          <li><NuxtLink class="nav-link" to="/company" :class="{'active-link': $route.path === '/company'}">Companies</NuxtLink></li>
+          <li><NuxtLink class="nav-link" to="/technologies" :class="{'active-link': $route.path === '/technologies'}">Technologies</NuxtLink></li>
+          <li><NuxtLink class="nav-link" to="/events" :class="{'active-link': $route.path === '/events'}">Events</NuxtLink></li>
+                  <li><NuxtLink class="nav-link" to="/news" :class="{'active-link': $route.path === '/news'}">News</NuxtLink></li>
           <li><NuxtLink class="nav-link" to="/contact">Contact Us</NuxtLink></li>
         </ul>
         
         <!-- Contact Info -->
         <div class="vertical-navbar-footer">
-          <div class="contact-info">
-            <NuxtLink to="tel:+96170003161" class="contact-link">
-              <i class="fas fa-phone"></i>+971 48769398
-            </NuxtLink>
-            <NuxtLink to="mailto:info@promo-fix.com" class="contact-link">
-              <i class="fas fa-envelope"></i> info@promo-fix.com
-            </NuxtLink>
-          </div>
+
 <div class="social-icons grid grid-cols-5 gap-4 text-center text-white text-xl">
   <a href="#" target="_blank" aria-label="X / Twitter">
     <i class="fab fa-x-twitter"></i>
@@ -75,7 +68,7 @@
         <div class="container max-w-8xl">
           <!-- Logo -->
           <NuxtLink class="navbar-brand" to="/">
-            <img src="/assets/images/logo.png" class="logo" alt="Logo">
+            <img src="/assets/images/logooo.jpg" class="logo" alt="Logo">
           </NuxtLink>
           <div class="flex justify-end items-center">
             <!-- Burger Button -->
@@ -92,7 +85,7 @@
       <div class="drawer" :class="{ open: drawerOpen }">
         <div class="drawer-header">
           <div class="drawer-logo">
-            <img src="/assets/images/logo.png" alt="Logo">
+            <img src="/assets/images/logooo.jpg" alt="Logo">
           </div>
           <button class="close-button" @click="toggleDrawer">
             <i class="fas fa-times"></i>
@@ -101,16 +94,16 @@
         
         <div class="drawer-content">
           <ul class="mobile-menu">
-            <li><NuxtLink class="mobile-nav-link" to="#" @click="toggleDrawer">Imad Jomaa</NuxtLink></li>
-            <li><NuxtLink class="mobile-nav-link" to="/about" @click="toggleDrawer">Our Story</NuxtLink></li>
-            <li><NuxtLink class="mobile-nav-link" to="/company" @click="toggleDrawer">Companies</NuxtLink></li>
-            <li><NuxtLink class="mobile-nav-link" to="/technologies" @click="toggleDrawer">Technologies</NuxtLink></li>
-            <li><NuxtLink class="mobile-nav-link" to="/events" @click="toggleDrawer">Events</NuxtLink></li>
-                        <li><NuxtLink class="mobile-nav-link" to="/news" @click="toggleDrawer">News</NuxtLink></li>
+            <li><NuxtLink class="mobile-nav-link" :class="{'active-link': $route.path === '/'}" to="#" @click="toggleDrawer">Imad Jomaa</NuxtLink></li>
+            <li><NuxtLink class="mobile-nav-link" :class="{'active-link': $route.path === '/about'}" to="/about" @click="toggleDrawer">Our Story</NuxtLink></li>
+            <li><NuxtLink class="mobile-nav-link" :class="{'active-link': $route.path === '/company'}" to="/company" @click="toggleDrawer">Companies</NuxtLink></li>
+            <li><NuxtLink class="mobile-nav-link" :class="{'active-link': $route.path === '/technologies'}" to="/technologies" @click="toggleDrawer">Technologies</NuxtLink></li>
+            <li><NuxtLink class="mobile-nav-link" :class="{'active-link': $route.path === '/events'}" to="/events" @click="toggleDrawer">Events</NuxtLink></li>
+                        <li><NuxtLink class="mobile-nav-link" :class="{'active-link': $route.path === '/news'}" to="/news" @click="toggleDrawer">News</NuxtLink></li>
             <li><NuxtLink class="mobile-nav-link" to="/contact" @click="toggleDrawer">Contact Us</NuxtLink></li>
           </ul>
           
-          <div class="mobile-contact">
+          <!-- <div class="mobile-contact">
             <h3 class="contact-title">Contact Info</h3>
             <a to="tel:+96170003161" class="contact-link">
               <i class="fas fa-phone"></i> +961 78 913 139
@@ -119,7 +112,7 @@
               <i class="fas fa-envelope"></i> info@promo-fix.com
             </a>
           </div>
-          
+           -->
           <div class="mobile-social">
             <h3 class="social-title">Follow Us</h3>
      <div class="social-icons grid grid-cols-5 gap-4 text-center text-white text-xl">
@@ -198,7 +191,7 @@ onMounted(() => {
 
 <style scoped>
 .vertical-menu .nav-link{
-  font-size: 20px;
+  font-size: 18px;
 }
 /* Top Bar Styles */
 .top-bar {
@@ -212,6 +205,28 @@ onMounted(() => {
   display: flex;
   gap: 30px;
   justify-content: center;
+}
+/* Desktop */
+.vertical-menu .nav-link.active-link {
+  color: #c00;
+  font-weight: 600;
+  position: relative;
+}
+
+/* Mobile */
+.mobile-nav-link.active-link {
+  color: #c00 !important;
+  font-weight: 600;
+}
+.vertical-menu .nav-link.active-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: #c00;
+  animation: underline 0.3s ease;
 }
 
 /* Main Layout */
@@ -248,10 +263,6 @@ onMounted(() => {
   text-align: center;
 }
 
-.logo {
-  height: 60px;
-  max-width: 80%;
-}
 
 .vertical-menu {
   list-style: none;
@@ -266,7 +277,7 @@ onMounted(() => {
 
 .vertical-menu .nav-link {
   display: block;
-  padding: 12px 15px;
+  padding: 12px 10px;
   color: white;
   text-decoration: none;
   font-weight: 500;
@@ -352,13 +363,16 @@ onMounted(() => {
   align-items: center;
   padding: 15px 20px;
   transition: background-color 0.3s, box-shadow 0.3s;
+  background-color: #000;
 }
 
 .navbar.scrolled {
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
-
+.menu-icon  img {
+  filter: brightness(0.5) invert(1);
+}
 /* Drawer Styles */
 .drawer {
   position: fixed;
@@ -367,7 +381,7 @@ onMounted(() => {
   width: 85%;
   max-width: 320px;
   height: 100%;
-  background: white;
+  background: black;
   z-index: 1100;
   transition: right 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
   box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
@@ -395,7 +409,7 @@ onMounted(() => {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #333;
+  color: #fff;
   cursor: pointer;
   transition: color 0.3s;
 }
@@ -419,7 +433,7 @@ onMounted(() => {
 .mobile-nav-link {
   display: block;
   padding: 15px 0;
-  color: #333;
+  color: #fff;
   text-decoration: none;
   font-size: 1.1rem;
   font-weight: 500;
@@ -442,7 +456,7 @@ onMounted(() => {
 .social-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
+  color: #fff;
   margin-bottom: 15px;
   padding-bottom: 8px;
   border-bottom: 1px solid #eee;
@@ -471,12 +485,10 @@ onMounted(() => {
 .mobile-social .social-icons a {
   width: 42px;
   height: 42px;
-  background: #f5f5f5;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #555;
+  color: #fff;
   transition: all 0.3s;
 }
 
@@ -507,6 +519,11 @@ onMounted(() => {
 
 /* Adjustments for mobile */
 @media (max-width: 767px) {
+  .logo {
+  height: 60px;
+  max-width: 80%;
+}
+
   .vertical-navbar {
     display: none;
   }
@@ -523,7 +540,7 @@ onMounted(() => {
 
 @media (min-width: 768px) {
   .vertical-menu li {
-    width: 130px;
+    width: 140px;
   }
   .main-header {
     display: none;
@@ -548,8 +565,7 @@ onMounted(() => {
   transform: scale(1.1);
 }
 .bg-silver-gradient{
-background: linear-gradient(to right, silver, rgb(32, 7, 7), rgb(183, 130, 130));
-color:black;
-
+background: #495057;
+color:white;
 }
 </style>

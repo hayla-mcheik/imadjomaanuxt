@@ -1,6 +1,6 @@
 <template>
   <!-- Hero Section Start-->
-  <div class="hero relative overflow-hidden pt-5" >
+  <div class="hero relative overflow-hidden pt-md-5" >
     <!-- Video Background -->
     <div class="hero-bg-video absolute inset-0 z-0 ">
       <!-- <video autoplay muted loop class="w-full h-full object-cover">
@@ -10,14 +10,14 @@
       <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent z-10"></div>
     </div>
 
-    <div class="container relative z-20 flex items-center max-w-8xl pt-5">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-5 ">
+    <div class="container relative z-20 flex items-center max-w-8xl pt-md-5">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-md-5 ">
         <!-- Left Content Column -->
-        <div class="lg:col-span-7 pt-5">
+        <div class="lg:col-span-7 pt-md-5">
           <!-- Section Title -->
       <div class="section-title">
-                            <h1 class="text-anime-style-2" data-cursor="-opaque">Your vision, our <span>creative expertise</span></h1>
-                            <p> the founder and president of JGROUP, established JGROUP in 2003 after completing his studies at the American University of Beirut (AUB). Jomaa has obtained a Masterâ€™s degree in financial economics and two bachelorâ€™s degrees in Economics and Chemistry.</p>
+                            <h1 class="text-anime-style-2" data-cursor="-opaque">Imad Jomaa | <span>Visionary Entrepreneur, Regional Leader,Global Connector</span></h1>
+                            <p>Imad Jomaa is a transformative business leader and the Founder and President of JGroup, a powerhouse at the crossroads of media, technology, and investment across the MENA region. With a bold vision and unmatched market foresight, he has built JGroup into a platform of global partnerships, regional influence, and digital innovation. As a strategic voice in international economic forums and a catalyst for growth across high-impact sectors, Imad is shaping the future of business in the Middle East and beyond.</p>
                         </div>
 
    
@@ -77,7 +77,7 @@ onMounted(() => {
 .hero {
   height: 80vh;
   min-height: 600px;
-  background-image: url('./assets/images/38.jpg');
+  background-image: url('../assets/images/38.jpg');
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -216,17 +216,17 @@ onMounted(() => {
   }
   
   .hero h1 {
-    font-size: 3.5rem;
+    font-size: 3rem;
   }
 }
 
 @media (max-width: 768px) {
   .hero {
-    min-height: 600px;
+    min-height: 100vh;
   }
   
   .hero h1 {
-    font-size: 2.8rem;
+    font-size: 2.2rem;
   }
   
   .social-icons {

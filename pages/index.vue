@@ -8,6 +8,7 @@
     <!-- <Milestone /> -->
 <Events />
 <News /> 
+<Map />
 </template>
 
 <script setup>
@@ -17,6 +18,7 @@ import Brand from '~/components/Frontend/Brand.vue';
 import Events from '~/components/Frontend/Events.vue';
 import HeroSlider from '~/components/Frontend/HeroSlider.vue';
 import InfiniteText from '~/components/Frontend/InfiniteText.vue';
+import Map from '~/components/Frontend/Map.vue';
 import Milestone from '~/components/Frontend/Milestone.vue';
 import MilestoneTest from '~/components/Frontend/MilestoneTest.vue';
 import News from '~/components/Frontend/News.vue';

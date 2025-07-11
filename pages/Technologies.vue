@@ -1,7 +1,7 @@
 <template>
-<Breadcrumbs />
+<div class="mt-5">
  <Brand />
-
+</div>
 </template>
 
 <script setup>

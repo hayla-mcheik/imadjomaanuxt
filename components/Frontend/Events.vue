@@ -39,8 +39,7 @@ const events = ref([
     
     <div class="container relative z-10 mx-auto px-4 max-w-7xl">
       <div class="section-title mb-12">
-        <h2 class="text-4xl md:text-5xl font-bold text-center text-white">Featured <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600">Events</span></h2>
-        <p class="text-gray-400 text-center mt-4 max-w-2xl mx-auto">Discover the premier events where innovation meets opportunity</p>
+        <h2 class="text-xl md:text-xl font-bold  text-white">Featured <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600">Events</span></h2>
       </div>
       
       <div class="events-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

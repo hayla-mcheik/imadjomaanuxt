@@ -1,389 +1,262 @@
 <template>
-  <div class="map-section relative py-16 overflow-hidden bg-black">
-    <!-- Decorative Elements -->
-    <div class="absolute inset-0 z-0">
-      <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-black rounded-full mix-blend-multiply filter blur-3xl opacity-10"></div>
-      <div class="absolute bottom-1/3 right-1/4 w-72 h-72 bg-black rounded-full mix-blend-multiply filter blur-3xl opacity-10"></div>
-    </div>
-    
-    <div class="container relative z-10 mx-auto px-4 max-w-7xl">
-      <div class="section-title mb-12 text-center">
-        <h2 class="text-4xl md:text-5xl font-bold text-white">Our <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Locations</span></h2>
-        <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Find our offices and service centers around the world</p>
+        <div class="section-title mb-12 pt-16">
+        <h2 class="text-4xl md:text-5xl font-bold text-center text-white">Our <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600">Locations</span></h2>
+      </div>
+  <div class="map-container">
+    <div class="map-image-wrapper">
+      <!-- Nature-themed map image -->
+      <img 
+        src="https://images.unsplash.com/photo-1476231682828-37e571bc172f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" 
+        alt="Nature Map" 
+        class="map-image"
+      />
+      
+      <!-- Red Pin -->
+      <div 
+        class="pin red-pin" 
+        :style="{ left: '25%', top: '40%' }"
+        @click="openPopup('red')"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/>
+        </svg>
       </div>
       
-      <div class="map-container flex flex-col lg:flex-row gap-8">
-        <!-- Map Controls -->
-        <div class="map-controls lg:w-1/4 bg-black backdrop-blur-sm rounded-xl p-6 border border-gray-700">
-          <h3 class="text-xl font-bold text-white mb-4">Office Locations</h3>
-          
-          <div class="location-list space-y-4 max-h-[400px] overflow-y-auto pr-2">
-            <div 
-              v-for="(location, index) in locations" 
-              :key="index"
-              class="location-card p-4 rounded-lg bg-gray-700/40 hover:bg-blue-800/30 transition-all cursor-pointer border border-gray-600 hover:border-blue-500"
-              @click="focusLocation(location)"
-              :class="{ 'bg-blue-800/40 border-red-500': activeLocation === location.id }"
-            >
-              <div class="flex items-start gap-3">
-                <div class="location-icon mt-1">
-                  <i :class="location.icon" class="text-red-400 text-lg"></i>
-                </div>
-                <div>
-                  <h4 class="text-white font-medium">{{ location.name }}</h4>
-                  <p class="text-gray-400 text-sm mt-1">{{ location.address }}</p>
-                  <div class="flex gap-2 mt-2">
-                    <span class="inline-block px-2 py-1 text-xs  rounded text-white-300">{{ location.type }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <!-- Green Pin -->
+      <div 
+        class="pin green-pin" 
+        :style="{ left: '60%', top: '30%' }"
+        @click="openPopup('green')"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/>
+        </svg>
+      </div>
+      
+      <!-- Black Pin -->
+      <div 
+        class="pin black-pin" 
+        :style="{ left: '45%', top: '60%' }"
+        @click="openPopup('black')"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/>
+        </svg>
+      </div>
+    </div>
+    
+    <!-- Popup Modal -->
+    <div v-if="activePopup" class="popup-overlay" @click.self="closePopup">
+      <div class="popup-content" :class="activePopup">
+        <button class="close-btn" @click="closePopup">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+        <h3>{{ popupData.title }}</h3>
+        <p>{{ popupData.description }}</p>
+        <div class="d-block">
+          <div>
+   <a class="text-black" :href="'tel:' + popupData.phone">Phone:{{ popupData.phone }}</a>
           </div>
-          
-          <div class="mt-6">
-            <h4 class="text-white font-medium mb-2">Legend</h4>
-            <div class="space-y-2">
-              <div class="flex items-center gap-2">
-                <div class="w-4 h-4 rounded-full bg-blue-500"></div>
-                <span class="text-gray-300 text-sm">Headquarters</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <div class="w-4 h-4 rounded-full bg-green-500"></div>
-                <span class="text-gray-300 text-sm">Regional Office</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <div class="w-4 h-4 rounded-full bg-yellow-500"></div>
-                <span class="text-gray-300 text-sm">Service Center</span>
-              </div>
-            </div>
-          </div>
+   <div class="mt-2">
+      <a class="text-black" :href="'mailto:' + popupData.email">Email:{{ popupData.email }}</a>
+   </div>
+
         </div>
-        
-        <!-- Map Display -->
-        <div class="map-display lg:w-3/4 h-[500px] rounded-xl overflow-hidden border-2 border-gray-700 shadow-xl relative">
-          <div ref="mapContainer" class="w-full h-full"></div>
-          
-          <!-- Map Attribution -->
-          <div class="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded z-[1000]">
-            &copy; <a to="https://www.openstreetmap.org/copyright" target="_blank" class="text-blue-300">OpenStreetMap</a> contributors
-          </div>
-        </div>
+
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref } from 'vue';
 
-// Fix for default marker icons in Leaflet
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png'
-});
+const activePopup = ref(null);
 
-const mapContainer = ref(null);
-let map = null;
-const activeLocation = ref(null);
-
-const locations = [
-  {
-    id: 1,
-    name: "Global Headquarters",
-    address: "123 Innovation Blvd, San Francisco, CA 94103",
-    type: "Headquarters",
-    lat: 37.7749,
-    lng: -122.4194,
-    icon: "fas fa-building",
-    description: "Our main office where all strategic decisions are made. Home to our executive team and innovation labs.",
-    phone: "78913139",
-    email: "info@promo-fix.com",
-    link: "https://maps.google.com/?q=37.7749,-122.4194"
+const popups = {
+  red: {
+    title: "Beirut,lebanon",
+    description: "loreum ipsum loreum ipsum loreum ipsum",
+  phone:"+971 48769398",
+  email:"info@promo-fix.com",
   },
-  {
-    id: 2,
-    name: "EMEA Regional Office",
-    address: "456 Tech Park, London, UK",
-    type: "Regional Office",
-    lat: 51.5074,
-    lng: -0.1278,
-    icon: "fas fa-globe-europe",
-    description: "Serving Europe, Middle East and Africa with dedicated support teams and regional management.",
-    phone: "78913139",
-    email: "info@promo-fix.com",
-    link: "https://maps.google.com/?q=51.5074,-0.1278"
+  green: {
+   title: "Qatar",
+    description: "loreum ipsum loreum ipsum loreum ipsum",
+  phone:"+971 48769398",
+    email:"info@promo-fix.com",
   },
-  {
-    id: 3,
-    name: "Asia-Pacific Service Center",
-    address: "789 Digital Avenue, Singapore 038987",
-    type: "Service Center",
-    lat: 1.3521,
-    lng: 103.8198,
-    icon: "fas fa-cogs",
-    description: "Our primary technical support and service hub for the Asia-Pacific region, open 24/7.",
-    phone: "78913139",
-    email: "info@promo-fix.com",
-    link: "https://maps.google.com/?q=1.3521,103.8198"
-  },
-  {
-    id: 4,
-    name: "Latin America Office",
-    address: "Avenida Paulista, 1000, São Paulo, Brazil",
-    type: "Regional Office",
-    lat: -23.5505,
-    lng: -46.6333,
-    icon: "fas fa-globe-americas",
-    description: "Regional headquarters for Latin American operations with sales and support teams.",
-    phone: "78913139",
-    email: "info@promo-fix.com",
-    link: "https://maps.google.com/?q=-23.5505,-46.6333"
-  },
-  {
-    id: 5,
-    name: "Middle East Hub",
-    address: "Dubai Internet City, Dubai, UAE",
-    type: "Service Center",
-    lat: 25.1107,
-    lng: 55.1594,
-    icon: "fas fa-tools",
-    description: "Technical support and implementation center serving the Middle East region.",
-    phone: "78913139",
-    email: "info@promo-fix.com",
-    link: "https://maps.google.com/?q=25.1107,55.1594"
+  black: {
+   title: "Dubai",
+    description: "loreum ipsum loreum ipsum loreum ipsum",
+  phone:"+971 48769398",
+    email:"info@promo-fix.com",
   }
-];
-
-const markers = [];
-
-const initMap = () => {
-  if (!mapContainer.value) return;
-  
-  // Initialize map
-  map = L.map(mapContainer.value, {
-    zoomControl: false,
-    attributionControl: false
-  }).setView([20, 0], 2);
-  
-  // Add tile layer
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-  }).addTo(map);
-  
-  // Add zoom control
-  L.control.zoom({ position: 'bottomright' }).addTo(map);
-  
-  // Create custom icons
-  const iconColors = {
-    "Headquarters": "blue",
-    "Regional Office": "green",
-    "Service Center": "gold"
-  };
-  
-  const createCustomIcon = (color) => {
-    return L.divIcon({
-      className: 'custom-icon',
-      html: `<div class="relative">
-        <svg width="30" height="42" viewBox="0 0 30 42" xmlns="http://www.w3.org/2000/svg">
-          <path d="M15 0C6.71573 0 0 6.71573 0 15C0 26.25 15 42 15 42C15 42 30 26.25 30 15C30 6.71573 23.2843 0 15 0Z" fill="${color}"/>
-          <circle cx="15" cy="15" r="8" fill="white"/>
-        </svg>
-      </div>`,
-      iconSize: [30, 42],
-      iconAnchor: [15, 42]
-    });
-  };
-  
-  // Add markers to the map
-  locations.forEach(location => {
-    const color = iconColors[location.type] || "blue";
-    const marker = L.marker([location.lat, location.lng], {
-      icon: createCustomIcon(color)
-    }).addTo(map);
-    
-    // Create popup content
-    const popupContent = `
-      <div class="leaflet-popup-content min-w-[250px]">
-        <div class="flex items-start gap-3">
-          <div class="mt-1 text-${color}-500">
-            <i class="${location.icon} text-lg"></i>
-          </div>
-          <div>
-            <h3 class="font-bold text-lg mb-1">${location.name}</h3>
-            <p class="text-gray-600 mb-2">${location.address}</p>
-            <div class="flex gap-2 mb-3">
-              <span class="inline-block px-2 py-1 text-xs bg-${color}-100 rounded text-${color}-800">${location.type}</span>
-            </div>
-            <p class="text-sm mb-3">${location.description}</p>
-            <div class="flex flex-col gap-1">
-              <div class="flex items-center gap-2">
-                <i class="fas fa-phone text-gray-500"></i>
-                <span class="text-sm">${location.phone}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <i class="fas fa-envelope text-gray-500"></i>
-                <span class="text-sm">${location.email}</span>
-              </div>
-            </div>
-            <div class="mt-3">
-              <a to="${location.link}" target="_blank" class="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800">
-                <i class="fas fa-map-marker-alt"></i>
-                Open in Google Maps
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    marker.bindPopup(popupContent);
-    markers.push(marker);
-    
-    // Open popup when location is active
-    if (activeLocation.value === location.id) {
-      marker.openPopup();
-    }
-  });
 };
 
-const focusLocation = (location) => {
-  activeLocation.value = location.id;
-  map.setView([location.lat, location.lng], 8);
-  
-  // Open the popup for this location
-  markers.forEach(marker => {
-    if (marker.getLatLng().lat === location.lat && 
-        marker.getLatLng().lng === location.lng) {
-      marker.openPopup();
-    }
-  });
+const popupData = ref({});
+
+const openPopup = (color) => {
+  activePopup.value = color;
+  popupData.value = popups[color];
 };
 
-onMounted(() => {
-  initMap();
-  // Set default active location
-  activeLocation.value = locations[0].id;
-  focusLocation(locations[0]);
-});
-
-onBeforeUnmount(() => {
-  if (map) {
-    map.remove();
-  }
-});
+const closePopup = () => {
+  activePopup.value = null;
+};
 </script>
 
 <style scoped>
-.map-section {
-  background: black;
-}
-
-.location-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.location-list::-webkit-scrollbar-track {
-  background: black;
-  border-radius: 4px;
-}
-
-.location-list::-webkit-scrollbar-thumb {
-  background: red;
-  border-radius: 4px;
-}
-
-.location-list::-webkit-scrollbar-thumb:hover {
-  background: red;
-}
-
-/* Leaflet custom marker styling */
-:deep(.leaflet-popup-content) {
-  margin: 12px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-:deep(.leaflet-popup-content-wrapper) {
-  border-radius: 8px;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
-}
-
-:deep(.leaflet-popup-tip) {
-  background: white;
-}
-
-:deep(.leaflet-container a.leaflet-popup-close-button) {
-  color: #999;
-  font-size: 20px;
-  padding: 6px 8px 0 0;
-}
-
-:deep(.leaflet-container a.leaflet-popup-close-button:hover) {
-  color: #555;
-}
-
-:deep(.leaflet-control-zoom) {
-  border: none;
-  border-radius: 4px;
+.map-container {
+  position: relative;
+  max-width: 1000px;
+  margin: 2rem auto;
+  border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-:deep(.leaflet-control-zoom a) {
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
-  border-bottom: 1px solid #ddd;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
+.map-image-wrapper {
+  position: relative;
+  height: 0;
+  padding-bottom: 75%; /* 4:3 aspect ratio */
 }
 
-:deep(.leaflet-control-zoom a:hover) {
-  background: #f8f8f8;
+.map-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.2) contrast(1.05);
 }
 
-:deep(.leaflet-control-zoom a:first-child) {
-  border-radius: 4px 4px 0 0;
+.pin {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -100%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
 }
 
-:deep(.leaflet-control-zoom a:last-child) {
-  border-bottom: none;
-  border-radius: 0 0 4px 4px;
+.pin svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-/* Animation for location cards */
-.location-card {
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  transform-origin: center;
+.pin:hover {
+  transform: translate(-50%, -100%) scale(1.2);
 }
 
-.location-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px red;
+.red-pin { color: #e53e3e; animation: pulse-red 2s infinite; }
+.green-pin { color: #38a169; animation: pulse-green 2s infinite; }
+.black-pin { color: #2d3748; animation: pulse-black 2s infinite; }
+
+@keyframes pulse-red {
+  0% { transform: translate(-50%, -100%) scale(1); }
+  50% { transform: translate(-50%, -100%) scale(1.1); }
+  100% { transform: translate(-50%, -100%) scale(1); }
 }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .map-container {
-    flex-direction: column;
-  }
-  
-  .map-controls, .map-display {
-    width: 100%;
-  }
-  
-  .map-display {
-    height: 400px;
-  }
+@keyframes pulse-green {
+  0% { transform: translate(-50%, -100%) scale(1); }
+  50% { transform: translate(-50%, -100%) scale(1.15); }
+  100% { transform: translate(-50%, -100%) scale(1); }
+}
+
+@keyframes pulse-black {
+  0% { transform: translate(-50%, -100%) scale(1); }
+  50% { transform: translate(-50%, -100%) scale(1.05); }
+  100% { transform: translate(-50%, -100%) scale(1); }
+}
+
+/* Popup Styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.popup-content {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+.popup-content.red { border-top: 6px solid #e53e3e; }
+.popup-content.green { border-top: 6px solid #38a169; }
+.popup-content.black { border-top: 6px solid #2d3748; }
+
+.popup-content h3 {
+  margin-top: 0;
+  color: #2d3748;
+  font-size: 1.5rem;
+}
+
+.popup-content p {
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+.popup-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.close-btn svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 768px) {
-  .map-display {
-    height: 350px;
+  .pin {
+    width: 30px;
+    height: 30px;
   }
-}
-
-.max-w-7xl {
-  max-width: 90%;
+  
+  .popup-content {
+    padding: 1.5rem;
+  }
 }
 </style>

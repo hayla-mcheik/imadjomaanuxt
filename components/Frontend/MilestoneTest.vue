@@ -29,33 +29,64 @@
           @touchend="endDrag"
         >
           <div 
-            class="flex h-full transition-transform duration-700 ease-in-out" 
-            :style="`transform: translateX(calc(${translateX}% + ${dragOffset}px))`"
+            class="flex h-full transition-transform duration-500 ease-in-out" 
+            :style="`transform: translateX(${getTranslateX()})`"
             :class="{ 'transition-none': isDragging }"
           >
+            <!-- Clone last slide for infinite loop -->
+            <div 
+              v-if="milestones.length > 1"
+              class="milestone-slide flex-shrink-0 w-full h-full relative px-0 transition-all duration-300"
+              :class="{
+                'active-slide': isActiveSlide(milestones.length - 1),
+                'inactive-slide': !isActiveSlide(milestones.length - 1)
+              }"
+            >
+              <div 
+                class="absolute inset-0 bg-cover bg-center transition-all duration-1000"
+                :style="{ backgroundImage: `url(${milestones[milestones.length - 1].image})` }"
+              >
+                <div 
+                  class="absolute inset-0 transition-all duration-700"
+                  :class="isActiveSlide(milestones.length - 1)
+                    ? 'bg-gradient-to-t from-black/50 to-black/20' 
+                    : 'bg-gradient-to-t from-black/90 to-black/60'"
+                ></div>
+              </div>
+              <div class="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-8">
+                <div class="milestone-date text-red-500 font-bold text-5xl mb-2 tracking-wide">
+                  {{ milestones[milestones.length - 1].date }}
+                </div>
+                <h3 class="text-white text-3xl md:text-4xl font-bold mb-6 max-w-3xl">
+                  {{ milestones[milestones.length - 1].title }}
+                </h3>
+                <p class="text-gray-300 text-lg md:text-lg max-w-2xl leading-relaxed">
+                  {{ milestones[milestones.length - 1].description }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Regular slides -->
             <div 
               v-for="(milestone, index) in milestones" 
               :key="index"
-              class="milestone-slide flex-shrink-0 w-full md:w-1/3 h-full relative px-0 md:px-0 transition-all duration-300"
+              class="milestone-slide flex-shrink-0 w-full h-full relative px-0 transition-all duration-300"
               :class="{
-                'active-slide': currentIndex === index,
-                'inactive-slide': currentIndex !== index
+                'active-slide': isActiveSlide(index),
+                'inactive-slide': !isActiveSlide(index)
               }"
             >
-              <!-- Background Image with Overlay - Reduced for active slide -->
               <div 
                 class="absolute inset-0 bg-cover bg-center transition-all duration-1000"
                 :style="{ backgroundImage: `url(${milestone.image})` }"
               >
                 <div 
                   class="absolute inset-0 transition-all duration-700"
-                  :class="currentIndex === index 
+                  :class="isActiveSlide(index)
                     ? 'bg-gradient-to-t from-black/50 to-black/20' 
                     : 'bg-gradient-to-t from-black/90 to-black/60'"
                 ></div>
               </div>
-
-              <!-- Content -->
               <div class="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-8">
                 <div class="milestone-date text-red-500 font-bold text-5xl mb-2 tracking-wide">
                   {{ milestone.date }}
@@ -63,8 +94,41 @@
                 <h3 class="text-white text-3xl md:text-4xl font-bold mb-6 max-w-3xl">
                   {{ milestone.title }}
                 </h3>
-                <p class="text-gray-300 text-lg md:text-xl max-w-2xl leading-relaxed">
+                <p class="text-gray-300 text-lg md:text-lg max-w-2xl leading-relaxed">
                   {{ milestone.description }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Clone first slide for infinite loop -->
+            <div 
+              v-if="milestones.length > 1"
+              class="milestone-slide flex-shrink-0 w-full h-full relative px-0 transition-all duration-300"
+              :class="{
+                'active-slide': isActiveSlide(0),
+                'inactive-slide': !isActiveSlide(0)
+              }"
+            >
+              <div 
+                class="absolute inset-0 bg-cover bg-center transition-all duration-1000"
+                :style="{ backgroundImage: `url(${milestones[0].image})` }"
+              >
+                <div 
+                  class="absolute inset-0 transition-all duration-700"
+                  :class="isActiveSlide(0)
+                    ? 'bg-gradient-to-t from-black/50 to-black/20' 
+                    : 'bg-gradient-to-t from-black/90 to-black/60'"
+                ></div>
+              </div>
+              <div class="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-8">
+                <div class="milestone-date text-red-500 font-bold text-5xl mb-2 tracking-wide">
+                  {{ milestones[0].date }}
+                </div>
+                <h3 class="text-white text-3xl md:text-4xl font-bold mb-6 max-w-3xl">
+                  {{ milestones[0].title }}
+                </h3>
+                <p class="text-gray-300 text-lg md:text-lg max-w-2xl leading-relaxed">
+                  {{ milestones[0].description }}
                 </p>
               </div>
             </div>
@@ -76,7 +140,7 @@
           <button 
             v-for="(milestone, index) in milestones" 
             :key="index"
-            @click="setSlide(index)"
+            @click="goToSlide(index)"
             :class="[
               'relative flex flex-col items-center',
               currentIndex === index ? 'text-red-500' : 'text-gray-400'
@@ -91,7 +155,6 @@
                 class="w-3 h-3 rounded-full bg-red-500"
               ></div>
             </div>
-            <span class="text-sm font-medium text-white">{{ milestone.date }}</span>
           </button>
         </div>
       </div>
@@ -104,7 +167,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 
 // Mock image URLs
 const imageUrls = [
@@ -149,30 +212,59 @@ const milestones = ref([
 ]);
 
 const currentIndex = ref(0);
-let autoSlideInterval = null;
-
-// New variables for drag/swipe functionality
 const isDragging = ref(false);
 const startX = ref(0);
 const dragOffset = ref(0);
+let autoSlideInterval = null;
+let isTransitioning = ref(false);
 
-const translateX = computed(() => {
-  return -currentIndex.value * (100 / 3);
-});
+// For infinite loop, we add clones at both ends
+const totalSlides = computed(() => milestones.value.length + 2);
+
+const isActiveSlide = (index) => {
+  return currentIndex.value === index;
+};
+
+const getTranslateX = () => {
+  // For mobile, we show full slides
+  if (window.innerWidth < 768) {
+    return `calc(${-currentIndex.value * 100}% + ${dragOffset.value}px)`;
+  }
+  // For desktop, we center the active slide
+  return `calc(${-currentIndex.value * (100 / 1.5)}% + ${dragOffset.value}px)`;
+};
 
 const nextSlide = () => {
+  if (isTransitioning.value) return;
+  
+  isTransitioning.value = true;
   currentIndex.value = (currentIndex.value + 1) % milestones.value.length;
-  resetAutoSlide();
+  
+  setTimeout(() => {
+    isTransitioning.value = false;
+  }, 500); // Match this with your transition duration
 };
 
 const prevSlide = () => {
+  if (isTransitioning.value) return;
+  
+  isTransitioning.value = true;
   currentIndex.value = (currentIndex.value - 1 + milestones.value.length) % milestones.value.length;
-  resetAutoSlide();
+  
+  setTimeout(() => {
+    isTransitioning.value = false;
+  }, 500);
 };
 
-const setSlide = (index) => {
+const goToSlide = (index) => {
+  if (isTransitioning.value) return;
+  
+  isTransitioning.value = true;
   currentIndex.value = index;
-  resetAutoSlide();
+  
+  setTimeout(() => {
+    isTransitioning.value = false;
+  }, 500);
 };
 
 const resetAutoSlide = () => {
@@ -183,31 +275,18 @@ const resetAutoSlide = () => {
 // Swipe/Drag functionality
 const startDrag = (e) => {
   isDragging.value = true;
-  // For touch events
-  if (e.type === 'touchstart') {
-    startX.value = e.touches[0].clientX;
-  } else {
-    // For mouse events
-    startX.value = e.clientX;
-  }
+  startX.value = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
   dragOffset.value = 0;
 };
 
 const onDrag = (e) => {
   if (!isDragging.value) return;
   
-  // Prevent scrolling on touch devices
   if (e.type === 'touchmove') {
     e.preventDefault();
   }
   
-  let currentX;
-  if (e.type === 'touchmove') {
-    currentX = e.touches[0].clientX;
-  } else {
-    currentX = e.clientX;
-  }
-  
+  const currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
   dragOffset.value = currentX - startX.value;
 };
 
@@ -215,21 +294,27 @@ const endDrag = () => {
   if (!isDragging.value) return;
   
   isDragging.value = false;
+  const threshold = 50; // Reduced threshold for better mobile experience
   
-  // Determine if we should change slides based on drag distance
-  const threshold = 100; // Minimum pixels to trigger slide change
   if (dragOffset.value > threshold) {
     prevSlide();
   } else if (dragOffset.value < -threshold) {
     nextSlide();
   }
   
-  // Reset drag offset
   dragOffset.value = 0;
 };
 
 onMounted(() => {
   resetAutoSlide();
+  // Handle window resize for responsive behavior
+  window.addEventListener('resize', () => {
+    // Force update the translateX calculation
+  });
+});
+
+onBeforeUnmount(() => {
+  clearInterval(autoSlideInterval);
 });
 </script>
 
@@ -251,22 +336,24 @@ onMounted(() => {
   transform-origin: center center;
   flex-shrink: 0;
   width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
   .milestone-slide {
-    width: 33.333%;
-    padding: 0;
+    width: 50%;
+    padding: 0 20px;
   }
   
   .milestone-slide.active-slide {
-    transform: scale(1);
+    transform: scale(1.05);
     z-index: 20;
   }
   
   .milestone-slide.inactive-slide {
-    transform: scale(0.9);
-    opacity: 0.7;
+    transform: scale(0.95);
+    opacity: 0.8;
     z-index: 10;
   }
 }
@@ -338,6 +425,10 @@ onMounted(() => {
   h3 {
     font-size: 1.8rem;
   }
+
+  .milestone-slide {
+    padding: 0 5px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -365,5 +456,13 @@ onMounted(() => {
 /* Disable transitions during drag for smooth dragging */
 .transition-none {
   transition: none !important;
+}
+
+/* Ensure slides are properly centered on mobile */
+@media (max-width: 767px) {
+  .milestone-slide {
+    width: 100% !important;
+    padding: 0 10px;
+  }
 }
 </style>
