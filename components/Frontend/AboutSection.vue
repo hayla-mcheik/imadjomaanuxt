@@ -7,11 +7,7 @@
   <div class="col-md-5 col-12">
     <div class="about-mission-vision text-left">     
       <h2>Our Mission</h2>
-      <p class="text-sm">To lead with foresight, invest in scalable ideas, and foster impactful partnerships that elevate industries, connect markets, and position the MENA region as a global force in media, technology, and business excellence.
-
-Additional Statement to be used around the website.
-
-"Challenging Limits. Creating Futures."</p>
+      <p class="text-sm">{{ mission }}</p>
     </div>   
   </div>
 
@@ -22,7 +18,7 @@ Additional Statement to be used around the website.
   <div class="col-md-5 col-12">
     <div class="about-mission-vision text-left">     
       <h2>Our Vision</h2>
-      <p class="text-sm">To shape the future of the Middle East's digital economy by building globally connected, innovation-led businesses that drive sustainable growth, regional empowerment, and strategic transformation.</p>
+      <p class="text-sm">{{ vision }}</p>
     </div>       
   </div>
 </div>
@@ -34,9 +30,37 @@ Additional Statement to be used around the website.
 
 </template>
 
-<script setup>
 
+<script setup>
+import axios from 'axios';
+const authStore = useAuthStore();
+import { ref, onMounted } from 'vue';
+// API base URL - configure this in your nuxt.config.js
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.apiBase || 'http://127.0.0.1:8000';
+const mission = ref('');
+const vision = ref('');
+
+onMounted(async () => {
+  try {
+      const response = await axios.get(`${apiBaseUrl}/about-data`,{
+      headers: {
+        Authorization: `Bearer ${authStore.token}`
+      }
+    });
+    console.log(response);
+
+    if (response) {
+      mission.value = response.data.about.mission;
+      vision.value = response.data.about.vision;
+    }
+  } catch (error) {
+    console.error('Error fetching about data:', error);
+
+  }
+});
 </script>
+
 
 <style scoped>
 .about-section {

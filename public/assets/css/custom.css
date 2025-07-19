@@ -53,11 +53,11 @@
 	--text-color			: #F5F5F4;
 	--accent-color			: #000000;
 	--dark-color			: #000000;
-	--red-color			: red;
+	--red-color			: #dc1f27;
 	--white-color			: #fff;
 	--divider-color			: #FFFFFF1A;
 	--dark-divider-color	: #F7FBFA1A;
-	--error-color			: rgb(230, 87, 87);
+	--error-color			: #dc1f27;
 	--default-font			: "Plus Jakarta Sans", serif;
 }
 
@@ -87,9 +87,9 @@ body{
 
     
             body::-webkit-scrollbar-thumb {
-                background-color: red;
+                background-color: #dc1f27;
                 border-radius: 50px;
-                border: 2px solid red;
+                border: 2px solid #dc1f27;
             }
 p{
 	line-height: 1.7em;
@@ -927,7 +927,6 @@ body:has(.offcanvas){
 
 .hero{
 	position: relative;
-	padding: 50px 0 120px;
 }
 
 .hero::before{
@@ -3283,7 +3282,7 @@ body:has(.offcanvas){
 }
 
 .footer-newsletter-form{
-	width: calc(70% - 25px);
+	width: calc(65% - 5px);
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -3360,8 +3359,8 @@ body:has(.offcanvas){
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 36px;
-    height: 36px;
+    width: 20px;
+    height: 20px;
     border: 1px solid var(--accent-color);
     border-radius: 50%;
 	transition: all 0.3s ease-in-out;
@@ -3396,11 +3395,10 @@ body:has(.offcanvas){
 
 .page-header{
     position: relative;
-	background: url('../images/5.jpg');
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
-	padding: 200px 0 200px;
+	padding: 140px 0 0px;
 }
 
 .page-header::before{
@@ -6260,9 +6258,7 @@ body:has(.offcanvas){
         max-width: 26px;
     }
 
-	.hero{
-		padding: 50px 0 50px;
-	}
+
 
 	.hero.bg-image{
 		padding: 200px 0 100px;
@@ -8743,4 +8739,7 @@ a{
 }
 a , p , h1 , h2 , h3 , h4 , h5 , h6 , span , strong {
 	  font-family: "Montserrat", sans-serif;
+}
+.text-red{
+	color:var(--red-color);
 }

@@ -1,32 +1,34 @@
 <script setup>
-import { ref } from 'vue';
 
-const events = ref([
-  {
-    id: 1,
-    title: "GSMA Mobile World Congress",
-    date: "February 26-29, 2024",
-    location: "Barcelona, Spain",
-    description: "The world's largest exhibition for the mobile industry, featuring the latest innovations in 5G, IoT, and AI.",
-    logo: "../assets/images/madein-lebanon.webp"
-  },
-  {
-    id: 2,
-    title: "Web Summit",
-    date: "November 11-14, 2024",
-    location: "Lisbon, Portugal",
-    description: "The world's premier tech conference where the tech world meets to discuss the future of digital innovation.",
-    logo: "../assets/images/WWC-2025.webp"
-  },
-  {
-    id: 3,
-    title: "CES",
-    date: "January 7-10, 2025",
-    location: "Las Vegas, USA",
-    description: "The most influential tech event in the world showcasing breakthrough technologies and global innovators.",
-    logo: "../assets/images/madein-lebanon.webp"
-  },
-]);
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.apiBase || 'http://127.0.0.1:8000';
+const mediaBase = runtimeConfig.public.mediaBase || 'http://127.0.0.1:8000';
+
+const eventsthree = ref([]);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(`${apiBaseUrl}/events`);
+    console.log(response);
+    if (response.data) {
+      // Handle both array and single project responses
+      eventsthree.value = Array.isArray(response.data) 
+        ? response.data 
+        : [response.data];
+      
+      // Ensure each project has a color fallback
+      eventsthree.value = response.data.eventsthree;
+      console.log(eventsthree);
+    }
+  } catch (error) {
+    console.error('Error fetching events data:', error);
+    // Fallback to empty array if API fails
+    eventsthree.value = [];
+  }
+});
 </script>
 
 <template>
@@ -45,7 +47,7 @@ const events = ref([
       <div class="events-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Event Card -->
         <div 
-          v-for="event in events" 
+          v-for="event in eventsthree" 
           :key="event.id" 
           class="event-card group relative overflow-hidden rounded-2xl border border-white/10 transition-all duration-500 hover:border-red-500/30"
         >
@@ -55,7 +57,7 @@ const events = ref([
             <!-- Event Header -->
             <div class="event-header mb-4 flex justify-between items-start">
               <div class="event-logo-container flex items-center justify-center bg-white rounded-lg p-2">
-                <img :src="event.logo" :alt="event.title + ' logo'" class="event-logo object-contain ">
+                <img :src="`${mediaBase}/${event.image}`" :alt="event.title + ' logo'" class="event-logo object-contain ">
               </div>
        
             </div>

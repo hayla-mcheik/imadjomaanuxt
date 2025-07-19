@@ -1,7 +1,7 @@
 // nuxt.config.js
 import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
-    ssr: false,
+    ssr:true ,
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
 
@@ -9,7 +9,16 @@ export default defineNuxtConfig({
   plugins: [
     tailwindcss(),
   ],
+
+    server: {
+      hmr: {
+        overlay: true // Force error overlay
+      }
+    }
+  
+
 },
+debug: true,
 
   css: [
     'swiper/css',
@@ -91,19 +100,24 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+      preset: 'static',
     prerender: {
-      crawlLinks: true
+      crawlLinks: true,
+    failOnError: true
     }
   },
   runtimeConfig: {
         public: {
-            apiBase: process.env.API_BASE_URL || 'http://localhost:8000/api',
+            apiBase: process.env.API_BASE_URL || 'https://imadjomaa.webgenix.info/api',
+            mediaBase: process.env.MEDIA_BASE_URL || 'https://imadjomaa.webgenix.info/api'
         }
     },
 
     modules: [
         'nuxt-swiper',
         '@pinia/nuxt',
+        '@nuxt/ui'
     ],
+    
 
 })

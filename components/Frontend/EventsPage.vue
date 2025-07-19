@@ -1,32 +1,34 @@
 <script setup>
-import { ref } from 'vue';
 
-const events = ref([
-  {
-    id: 1,
-    title: "GSMA Mobile World Congress",
-    date: "February 26-29, 2024",
-    location: "Barcelona, Spain",
-    description: "The world's largest exhibition for the mobile industry, featuring the latest innovations in 5G, IoT, and AI.",
-    logo: "../assets/images/madein-lebanon.webp"
-  },
-  {
-    id: 2,
-    title: "Web Summit",
-    date: "November 11-14, 2024",
-    location: "Lisbon, Portugal",
-    description: "The world's premier tech conference where the tech world meets to discuss the future of digital innovation.",
-    logo: "../assets/images/WWC-2025.webp"
-  },
-  {
-    id: 3,
-    title: "CES",
-    date: "January 7-10, 2025",
-    location: "Las Vegas, USA",
-    description: "The most influential tech event in the world showcasing breakthrough technologies and global innovators.",
-    logo: "../assets/images/madein-lebanon.webp"
-  },
-]);
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.apiBase || 'http://127.0.0.1:8000';
+const mediaBase = runtimeConfig.public.mediaBase || 'http://127.0.0.1:8000';
+
+const events = ref([]);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(`${apiBaseUrl}/events`);
+    console.log(response);
+    if (response.data) {
+      // Handle both array and single project responses
+      events.value = Array.isArray(response.data) 
+        ? response.data 
+        : [response.data];
+      
+      // Ensure each project has a color fallback
+      events.value = response.data.events;
+      console.log(events);
+    }
+  } catch (error) {
+    console.error('Error fetching events data:', error);
+    // Fallback to empty array if API fails
+    events.value = [];
+  }
+});
 </script>
 
 <template>
@@ -40,7 +42,6 @@ const events = ref([
     <div class="container relative z-10 mx-auto px-4 max-w-7xl">
       <div class="section-title mb-12">
         <h2 class="text-4xl md:text-5xl font-bold text-center text-white">Featured <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600">Events</span></h2>
-        <p class="text-gray-400 text-center mt-4 max-w-2xl mx-auto">Discover the premier events where innovation meets opportunity</p>
       </div>
       
       <div class="events-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -56,7 +57,7 @@ const events = ref([
             <!-- Event Header -->
             <div class="event-header mb-4 flex justify-between items-start">
               <div class="event-logo-container flex items-center justify-center bg-white rounded-lg p-2">
-                <img :src="event.logo" :alt="event.title + ' logo'" class="event-logo object-contain ">
+                <img :src="`${mediaBase}/${event.image}`" :alt="event.title + ' logo'" class="event-logo object-contain ">
               </div>
        
             </div>

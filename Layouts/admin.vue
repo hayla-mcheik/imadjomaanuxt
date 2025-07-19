@@ -1,15 +1,15 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex">
+  <div class="min-h-screen bg-black flex">
     <!-- Mobile sidebar backdrop -->
     <div v-if="sidebarOpen" class="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden" @click="sidebarOpen = false"></div>
 
     <!-- Sidebar -->
     <aside 
-      class="fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform transition-all duration-300 ease-in-out"
+      class="fixed inset-y-0 left-0 z-30 w-64 bg-black shadow-lg transform transition-all duration-300 ease-in-out"
       :class="{'translate-x-0': sidebarOpen, '-translate-x-full lg:translate-x-0': !sidebarOpen}"
     >
-      <div class="flex items-center justify-between h-16 px-4 bg-gradient-to-r from-blue-600 to-blue-500">
-        <h1 class="text-white font-bold text-xl">Admin Panel</h1>
+      <div class="flex items-center justify-between h-16 px-4 bg-black">
+          <img src="/assets/images/logooo.jpg" class="logo" alt="Logo" />
         <button @click="sidebarOpen = false" class="lg:hidden text-white focus:outline-none">
           <i class="fas fa-times"></i>
         </button>
@@ -31,20 +31,31 @@
             </NuxtLink>
             
 <NuxtLink 
-  to="/admin/heroslider" 
-  class="group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+  to="/admin/about" 
+  class="group flex text-white items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
   :class="{
-    'bg-blue-50 text-blue-600': $route.path === '/admin/heroslider',
-    'text-gray-600 hover:bg-gray-100': $route.path !== '/admin/heroslider'
+    'bg-blue-50 text-blue-600': $route.path === '/admin/about',
+    'text-black hover:bg-gray-100': $route.path !== '/admin/about'
   }"
 >
   <i class="fas fa-images mr-3 text-gray-500 group-hover:text-blue-500"></i>
-  Hero Slider
+About
+</NuxtLink>
+<NuxtLink 
+  to="/admin/hero" 
+  class="group text-white flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+  :class="{
+    'bg-blue-50 text-blue-600': $route.path === '/admin/hero',
+    'text-gray-600 hover:bg-gray-100': $route.path !== '/admin/hero'
+  }"
+>
+  <i class="fas fa-images mr-3 text-gray-500 group-hover:text-blue-500"></i>
+Hero Slider
 </NuxtLink>
 
 <NuxtLink 
   to="/admin/events" 
-  class="group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+  class="group text-white flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
   :class="{
     'bg-blue-50 text-blue-600': $route.path === '/admin/events',
     'text-gray-600 hover:bg-gray-100': $route.path !== '/admin/events'
@@ -53,23 +64,77 @@
   <i class="fas fa-calendar-alt mr-3 text-gray-500 group-hover:text-blue-500"></i>
   Events
 </NuxtLink>
+<NuxtLink 
+  to="/admin/news" 
+  class="group text-white flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+  :class="{
+    'bg-blue-50 text-blue-600': $route.path === '/admin/news',
+    'text-gray-600 hover:bg-gray-100': $route.path !== '/admin/news'
+  }"
+>
+  <i class="fas fa-calendar-alt mr-3 text-gray-500 group-hover:text-blue-500"></i>
+  News
+</NuxtLink>
+
+<NuxtLink 
+  to="/admin/milestone" 
+  class="group text-white flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+  :class="{
+    'bg-blue-50 text-blue-600': $route.path === '/admin/milestone',
+    'text-gray-600 hover:bg-gray-100': $route.path !== '/admin/milestone'
+  }"
+>
+  <i class="fas fa-calendar-alt mr-3 text-gray-500 group-hover:text-blue-500"></i>
+  Milestone
+</NuxtLink>
+<NuxtLink 
+  to="/admin/projects" 
+  class="group text-white flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+  :class="{
+    'bg-blue-50 text-blue-600': $route.path === '/admin/projects',
+    'text-gray-600 hover:bg-gray-100': $route.path !== '/admin/projects'
+  }"
+>
+  <i class="fas fa-calendar-alt mr-3 text-gray-500 group-hover:text-blue-500"></i>
+  Projects
+</NuxtLink>
+
+<NuxtLink 
+  to="/admin/technologies" 
+  class="group text-white flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+  :class="{
+    'bg-blue-50 text-blue-600': $route.path === '/admin/technologies',
+    'text-gray-600 hover:bg-gray-100': $route.path !== '/admin/technologies'
+  }"
+>
+  <i class="fas fa-calendar-alt mr-3 text-gray-500 group-hover:text-blue-500"></i>
+  Technologies
+</NuxtLink>
+<NuxtLink 
+  to="/admin/logos" 
+  class="group text-white flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+  :class="{
+    'bg-blue-50 text-blue-600': $route.path === '/admin/logos',
+    'text-gray-600 hover:bg-gray-100': $route.path !== '/admin/logos'
+  }"
+>
+  <i class="fas fa-calendar-alt mr-3 text-gray-500 group-hover:text-blue-500"></i>
+  Logos
+</NuxtLink>
+<NuxtLink 
+  to="/admin/locations" 
+  class="group text-white flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+  :class="{
+    'bg-blue-50 text-blue-600': $route.path === '/admin/locations',
+    'text-gray-600 hover:bg-gray-100': $route.path !== '/admin/locations'
+  }"
+>
+  <i class="fas fa-calendar-alt mr-3 text-gray-500 group-hover:text-blue-500"></i>
+  Locations
+</NuxtLink>
           </div>
           
-          <div class="mt-8">
-            <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Reports
-            </h3>
-            <div class="mt-1 space-y-1">
-              <a href="#" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-100">
-                <i class="fas fa-chart-line mr-3 text-gray-400 group-hover:text-gray-500"></i>
-                Analytics
-              </a>
-              <a href="#" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-100">
-                <i class="fas fa-file-alt mr-3 text-gray-400 group-hover:text-gray-500"></i>
-                Reports
-              </a>
-            </div>
-          </div>
+      
         </nav>
       </div>
     </aside>
@@ -83,7 +148,7 @@
             <button @click="sidebarOpen = true" class="mr-4 text-gray-500 focus:outline-none lg:hidden">
               <i class="fas fa-bars"></i>
             </button>
-            <h2 class="text-lg font-semibold text-gray-900">{{ currentPageTitle }}</h2>
+            <h2 class="text-lg font-semibold text-black">{{ currentPageTitle }}</h2>
           </div>
           
           <div class="flex items-center space-x-4">
@@ -134,9 +199,10 @@
       </header>
 
       <!-- Page content -->
-      <main class="flex-1 p-6 bg-gray-50">
+      <main class="flex-1 p-6 bg-black">
         <div class="max-w-7xl mx-auto">
           <slot />
+          
         </div>
       </main>
     </div>
@@ -145,7 +211,11 @@
 
 <script setup>
 import { useAuthStore } from '~/stores/auth';
+definePageMeta({
+  layout: 'admin',
+  key: 'Admin management',
 
+}); 
 const authStore = useAuthStore();
 const route = useRoute();
 const sidebarOpen = ref(false);

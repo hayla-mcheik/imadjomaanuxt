@@ -12,7 +12,7 @@
         
         <!-- Vertical Menu -->
         <ul class="vertical-menu pt-5">
-          <li class="bg-silver-gradient"><NuxtLink class="nav-link text-white" to="#">Imad Jomaa</NuxtLink></li>
+          <li class="bg-silver-gradient"><NuxtLink class="nav-link text-white font-bold italic" to="/imadjoma">Imad Jomaa</NuxtLink></li>
           <li><NuxtLink class="nav-link" to="/about" :class="{'active-link': $route.path === '/about'}">My Story</NuxtLink></li>
           <li><NuxtLink class="nav-link" to="/company" :class="{'active-link': $route.path === '/company'}">Companies</NuxtLink></li>
           <li><NuxtLink class="nav-link" to="/technologies" :class="{'active-link': $route.path === '/technologies'}">Technologies</NuxtLink></li>
@@ -30,9 +30,6 @@
   </a>
   <a href="#" target="_blank" aria-label="Facebook">
     <i class="fab fa-facebook-f"></i>
-  </a>
-  <a href="#" target="_blank" aria-label="LinkedIn">
-    <i class="fab fa-linkedin"></i>
   </a>
   <a href="#" target="_blank" aria-label="YouTube">
     <i class="fab fa-youtube"></i>
@@ -94,7 +91,7 @@
         
         <div class="drawer-content">
           <ul class="mobile-menu">
-            <li><NuxtLink class="mobile-nav-link" :class="{'active-link': $route.path === '/'}" to="#" @click="toggleDrawer">Imad Jomaa</NuxtLink></li>
+            <li><NuxtLink class="mobile-nav-link" :class="{'active-link': $route.path === '/'}" to="/imadjoma" @click="toggleDrawer">Imad Jomaa</NuxtLink></li>
             <li><NuxtLink class="mobile-nav-link" :class="{'active-link': $route.path === '/about'}" to="/about" @click="toggleDrawer">Our Story</NuxtLink></li>
             <li><NuxtLink class="mobile-nav-link" :class="{'active-link': $route.path === '/company'}" to="/company" @click="toggleDrawer">Companies</NuxtLink></li>
             <li><NuxtLink class="mobile-nav-link" :class="{'active-link': $route.path === '/technologies'}" to="/technologies" @click="toggleDrawer">Technologies</NuxtLink></li>
@@ -128,9 +125,7 @@
   <a href="#" target="_blank" aria-label="YouTube">
     <i class="fab fa-youtube"></i>
   </a>
-  <a href="#" target="_blank" aria-label="LinkedIn Alt">
-    <i class="fab fa-linkedin-in"></i>
-  </a>
+
 
   <a href="#" target="_blank" aria-label="Instagram">
     <i class="fab fa-instagram"></i>
@@ -565,7 +560,6 @@ onMounted(() => {
   transform: scale(1.1);
 }
 .bg-silver-gradient{
-background: #495057;
-color:white;
+background: gray;
 }
 </style>

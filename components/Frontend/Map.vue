@@ -1,44 +1,29 @@
 <template>
-        <div class="section-title mb-12 pt-16">
-        <h2 class="text-4xl md:text-5xl font-bold text-center text-white">Our <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600">Locations</span></h2>
-      </div>
+  <div class="section-title mb-12 pt-16">
+    <h2 class="text-4xl md:text-5xl font-bold text-center text-white">Our <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600">Locations</span></h2>
+  </div>
+  
   <div class="map-container">
     <div class="map-image-wrapper">
       <!-- Nature-themed map image -->
       <img 
-        src="https://images.unsplash.com/photo-1476231682828-37e571bc172f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" 
+        src="/assets/images/map.png" 
         alt="Nature Map" 
         class="map-image"
       />
       
-      <!-- Red Pin -->
-      <div 
-        class="pin red-pin" 
-        :style="{ left: '25%', top: '40%' }"
-        @click="openPopup('red')"
-      >
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/>
-        </svg>
-      </div>
-      
-      <!-- Green Pin -->
-      <div 
-        class="pin green-pin" 
-        :style="{ left: '60%', top: '30%' }"
-        @click="openPopup('green')"
-      >
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/>
-        </svg>
-      </div>
-      
-      <!-- Black Pin -->
-      <div 
-        class="pin black-pin" 
-        :style="{ left: '45%', top: '60%' }"
-        @click="openPopup('black')"
-      >
+      <!-- Dynamic Pins -->
+<div 
+  v-for="(location, index) in locations" 
+  :key="index"
+  class="pin" 
+  :class="`${location.color || 'red'}-pin`"
+  :style="{ 
+    left: `${location.position_x || 50}%`, 
+    top: `${location.position_y || 50}%` 
+  }"
+  @click="openPopup(location)"
+>
         <svg viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/>
         </svg>
@@ -46,73 +31,73 @@
     </div>
     
     <!-- Popup Modal -->
-    <div v-if="activePopup" class="popup-overlay" @click.self="closePopup">
-      <div class="popup-content" :class="activePopup">
+    <div v-if="activeLocation" class="popup-overlay" @click.self="closePopup">
+      <div class="popup-content" :class="`${activeLocation.color}`">
         <button class="close-btn" @click="closePopup">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M6 18L18 6M6 6l12 12"/>
           </svg>
         </button>
-        <h3>{{ popupData.title }}</h3>
-        <p>{{ popupData.description }}</p>
+        <h3>{{ activeLocation.name }}</h3>
+        <p>{{ activeLocation.description }}</p>
         <div class="d-block">
           <div>
-   <a class="text-black" :href="'tel:' + popupData.phone">Phone:{{ popupData.phone }}</a>
+            <a class="text-black" :href="'tel:' + activeLocation.phone">Phone: {{ activeLocation.phone }}</a>
           </div>
-   <div class="mt-2">
-      <a class="text-black" :href="'mailto:' + popupData.email">Email:{{ popupData.email }}</a>
-   </div>
-
+          <div class="mt-2">
+            <a class="text-black" :href="'mailto:' + activeLocation.email">Email: {{ activeLocation.email }}</a>
+          </div>
         </div>
-
-
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
-const activePopup = ref(null);
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.apiBase || 'http://127.0.0.1:8000';
+const mediaBase = runtimeConfig.public.mediaBase || 'http://127.0.0.1:8000';
 
-const popups = {
-  red: {
-    title: "Beirut,lebanon",
-    description: "loreum ipsum loreum ipsum loreum ipsum",
-  phone:"+971 48769398",
-  email:"info@promo-fix.com",
-  },
-  green: {
-   title: "Qatar",
-    description: "loreum ipsum loreum ipsum loreum ipsum",
-  phone:"+971 48769398",
-    email:"info@promo-fix.com",
-  },
-  black: {
-   title: "Dubai",
-    description: "loreum ipsum loreum ipsum loreum ipsum",
-  phone:"+971 48769398",
-    email:"info@promo-fix.com",
-  }
-};
+const locations = ref([]);
+const activeLocation = ref(null);
 
-const popupData = ref({});
-
-const openPopup = (color) => {
-  activePopup.value = color;
-  popupData.value = popups[color];
+const openPopup = (location) => {
+  activeLocation.value = location;
 };
 
 const closePopup = () => {
-  activePopup.value = null;
+  activeLocation.value = null;
+};
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(`${apiBaseUrl}/locations`);
+    console.log(response);
+    if (response.data && response.data.locations) {
+      locations.value = response.data.locations;
+  
+    }
+  } catch (error) {
+    console.error('Error fetching locations data:', error);
+    // Fallback to default locations if API fails
+  }
+});
+
+// Helper function for random positioning
+const getRandomPosition = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 </script>
 
 <style scoped>
+/* Your existing styles remain the same */
 .map-container {
   position: relative;
-  max-width: 1000px;
+
+  height: 500px;
   margin: 2rem auto;
   border-radius: 16px;
   overflow: hidden;

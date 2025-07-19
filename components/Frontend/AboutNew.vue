@@ -4,8 +4,7 @@
         <h1 class="text-3xl md:text-4xl font-bold mb-6 font-montserrat">About Imad Jomaa</h1>
         <div class="max-w-5xl mx-auto mt-4">
           <blockquote class="text-lg md:text-lg font-medium">
-          Imad Jomaa is a pioneering entrepreneur, investor, and the Founder and President of JGroup, a diversified business group at the forefront of media, advertising, and technology in the MENA region. Since founding the company in 2003, Imad has led JGroup’s transformation from a Beirut-based operation into an internationally recognized ecosystem of subsidiaries, including Promofix, Promomedia, Optiview, and WMS.
-Imad holds a Master’s degree in Financial Economics and dual Bachelor’s degrees in Economics and Chemistry from the American University of Beirut (AUB), where he graduated as class valedictorian.
+         {{ aboutContent }}
           </blockquote>
         </div>
       </div>
@@ -13,8 +12,33 @@ Imad holds a Master’s degree in Financial Economics and dual Bachelor’s degr
 
 </template>
 
-<script setup>
 
+<script setup>
+import axios from 'axios';
+const authStore = useAuthStore();
+import { ref, onMounted } from 'vue';
+// API base URL - configure this in your nuxt.config.js
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.apiBase || 'http://127.0.0.1:8000';
+const aboutContent = ref('');
+
+onMounted(async () => {
+  try {
+      const response = await axios.get(`${apiBaseUrl}/about-data`,{
+      headers: {
+        Authorization: `Bearer ${authStore.token}`
+      }
+    });
+    console.log(response);
+
+    if (response) {
+      aboutContent.value = response.data.about.smalldesc;
+    }
+  } catch (error) {
+    console.error('Error fetching about data:', error);
+
+  }
+});
 </script>
 
 <style scoped>

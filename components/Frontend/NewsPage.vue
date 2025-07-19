@@ -1,33 +1,34 @@
 <script setup>
-import { ref } from 'vue';
 
-const newsItems = ref([
-  {
-    id: 1,
-    title: "Promomedia Wins Tech Innovation Award 2024",
-    date: "May 15, 2024",
-    category: "Company News",
-    excerpt: "Our groundbreaking AR platform recognized as industry leader in digital marketing solutions.",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-  },
-  {
-    id: 2,
-    title: "How AI is Revolutionizing Event Marketing",
-    date: "April 28, 2024",
-    category: "Industry Insights",
-    excerpt: "Exploring the future of personalized event experiences through artificial intelligence.",
-    image: "https://images.unsplash.com/photo-1533750349088-cd871a92f312?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-  },
-  {
-    id: 3,
-    title: "Case Study: GSMA MWC Brand Activation",
-    date: "March 10, 2024",
-    category: "Success Stories",
-    excerpt: "How we delivered a 300% ROI for our client at Mobile World Congress Barcelona.",
-    image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-  },
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
 
-]);
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.apiBase || 'http://127.0.0.1:8000';
+const mediaBase = runtimeConfig.public.mediaBase || 'http://127.0.0.1:8000';
+
+const news = ref([]);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(`${apiBaseUrl}/news`);
+    console.log(response);
+    if (response.data) {
+      // Handle both array and single project responses
+      news.value = Array.isArray(response.data) 
+        ? response.data 
+        : [response.data];
+      
+      // Ensure each project has a color fallback
+      news.value = response.data.news;
+      console.log(news);
+    }
+  } catch (error) {
+    console.error('Error fetching news data:', error);
+    // Fallback to empty array if API fails
+    news.value = [];
+  }
+});
 </script>
 
 <template>
@@ -41,14 +42,13 @@ const newsItems = ref([
     <div class="container relative z-10 mx-auto px-4 max-w-7xl">
       <div class="section-title mb-12 text-center">
         <h2 class="text-4xl md:text-5xl font-bold text-white">Latest <span class="text-transparent bg-clip-text bg-white">News</span></h2>
-        <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Stay updated with our insights, achievements, and industry trends</p>
       </div>
       
       <!-- News Grid -->
       <div class="news-grid grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- News Cards with Content Over Image -->
         <div 
-          v-for="item in newsItems" 
+          v-for="item in news" 
           :key="item.id" 
           class="news-card group relative overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl"
         >
@@ -56,18 +56,13 @@ const newsItems = ref([
               <NuxtLink to="/news-details">
           <div 
             class="absolute inset-0 bg-cover bg-center transition-all duration-700 group-hover:scale-110"
-            :style="{ backgroundImage: `url(${item.image})` }"
+            :style="{'background-image' : `url(${mediaBase}/${item.image})`}"
           >
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
           </div>
         </NuxtLink>
           <!-- Content Overlay -->
           <div class="relative z-10 p-6 flex flex-col justify-end min-h-[400px]">
-            <div class="news-category mb-3">
-              <span class="inline-block px-3 py-1 bg-black text-white text-xs font-semibold rounded-full">
-                {{ item.category }}
-              </span>
-            </div>
             
             <h3 class="news-title text-xl font-bold text-white mb-3 leading-tight">{{ item.title }}</h3>
             
@@ -78,7 +73,7 @@ const newsItems = ref([
               </div>
             </div>
             
-            <p class="news-excerpt text-gray-200 text-sm mb-5">{{ item.excerpt }}</p>
+            <p class="news-excerpt text-gray-200 text-sm mb-5">{{ item.description }}</p>
             
   
           </div>

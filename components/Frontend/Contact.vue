@@ -15,61 +15,7 @@
             <!-- Contact Info Image End -->
 
             <!-- Location Tabs Start -->
-            <div class="location-tabs wow fadeInUp">
-              <div class="tab-buttons">
-                <button 
-                  v-for="(location, index) in locations" 
-                  :key="index"
-                  @click="activeTab = index"
-                  :class="{ active: activeTab === index }"
-                >
-                  {{ location.city }}
-                </button>
-              </div>
-              
-              <div class="tab-content">
-                <div 
-                  v-for="(location, index) in locations" 
-                  :key="index"
-                  v-show="activeTab === index"
-                  class="contact-info-box"
-                >
-                  <!-- Contact Info List Start -->
-                  <div class="contact-info-list">
-                    <!-- Contact Info List Item Start -->
-                    <div class="contact-info-list-item">
-                   
-                      <div class="contact-info-title">
-                        <h3><a class="text-xs" :href="`tel:${location.phone}`">{{ location.phone }}</a></h3>
-                        <p class="text-xs" v-if="location.phone2"><a :href="`tel:${location.phone2}`">{{ location.phone2 }}</a></p>
-                      </div>
-                    </div>
-                    <!-- Contact Info List Item End -->
-                    
-                    <!-- Contact Info List Item Start -->
-                    <div class="contact-info-list-item">
-            
-                      <div class="contact-info-title">
-                        <h3><a class="text-xs" :href="`mailto:${location.email}`">{{ location.email }}</a></h3>
-                        <p class="text-xs" v-if="location.email2"><a :href="`mailto:${location.email2}`">{{ location.email2 }}</a></p>
-                      </div>
-                    </div>
-                    <!-- Contact Info List Item End -->
-                    
-                    <!-- Contact Info List Item Start -->
-                    <div class="contact-info-list-item">
-              
-                    </div>
-                    <!-- Contact Info List Item End -->
-                  </div>
-                  <!-- Contact Info List End -->
-
-                  <!-- Contact Social List Start -->
-          
-                  <!-- Contact Social List End -->
-                </div>
-              </div>
-            </div>
+     
             <!-- Location Tabs End -->
           </div>
           <!-- Contact Us Content End -->
@@ -86,44 +32,68 @@
             <!-- Section Title End -->
 
             <!-- Contact Form Start -->
-            <div class="contact-form">
-              <form id="contactForm" action="#" method="POST" class="wow fadeInUp" data-wow-delay="0.4s">
-                <div class="row">                                
-                  <div class="form-group col-md-6 mb-4">
-                    <input type="text" name="fname" class="form-control" id="fname" placeholder="First name" required>
-                  </div>
-  
-                  <div class="form-group col-md-6 mb-4">
-                    <input type="text" name="lname" class="form-control" id="lname" placeholder="Last name" required>
-                  </div>
-  
-                  <div class="form-group col-md-12 mb-4">
-                    <input type="text" name="phone" class="form-control" id="phone" placeholder="Enter your mobile no." required>
-                  </div>
-  
-                  <div class="form-group col-md-12 mb-4">
-                    <input type="email" name="email" class="form-control" id="email" placeholder="Enter your e-mail" required>
-                  </div>
+        <div class="contact-form">
+    <form @submit.prevent="handleSubmit" class="wow fadeInUp" data-wow-delay="0.4s">
+      <div class="row">                                
+        <div class="form-group col-md-6 mb-4">
+          <input 
+            type="text" 
+            v-model="form.name"
+            class="form-control" 
+            placeholder="Your name" 
+            required
+          >
+        </div>
 
-                  <div class="form-group col-md-12 mb-4">
-                    <select name="location" class="form-control" required>
-                      <option value="">Select location</option>
-                      <option v-for="(location, index) in locations" :key="index" :value="location.city">
-                        {{ location.city }}
-                      </option>
-                    </select>
-                  </div>
-  
-                  <div class="form-group col-md-12 mb-5">
-                    <textarea name="message" class="form-control" id="message" rows="4" placeholder="Write message..." required></textarea>
-                  </div>
-  
-                  <div class="col-md-12">
-                    <button type="submit" class="btn-default"><span>send message</span></button>
-                  </div>
-                </div>
-              </form>
-            </div>
+        <div class="form-group col-md-6 mb-4">
+          <input 
+            type="email" 
+            v-model="form.email"
+            class="form-control" 
+            placeholder="Your email" 
+            required
+          >
+        </div>
+
+        <div class="form-group col-md-12 mb-4">
+          <input 
+            type="tel" 
+            v-model="form.phone"
+            class="form-control" 
+            placeholder="Your phone number"
+          >
+        </div>
+
+        <div class="form-group col-md-12 mb-5">
+          <textarea 
+            v-model="form.message"
+            class="form-control" 
+            rows="4" 
+            placeholder="Your message" 
+            required
+          ></textarea>
+        </div>
+
+        <div class="col-md-12">
+          <button 
+            type="submit" 
+            class="btn-default"
+            :disabled="loading"
+          >
+            <span v-if="!loading">Send message</span>
+            <span v-else>Sending...</span>
+          </button>
+        </div>
+      </div>
+      
+      <div v-if="successMessage" class="mt-4 text-green-500">
+        {{ successMessage }}
+      </div>
+      <div v-if="errorMessage" class="mt-4 text-red-500">
+        {{ errorMessage }}
+      </div>
+    </form>
+  </div>
             <!-- Contact Form End -->
           </div>
           <!-- Contact Us Form End -->
@@ -135,6 +105,7 @@
 </template>
 
 <script setup>
+import axios from 'axios';
 import { ref } from 'vue';
 
 const activeTab = ref(0);
@@ -173,6 +144,54 @@ const locations = ref([
     hours: "Mon-Fri: 9AM-6PM SGT"
   }
 ]);
+
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.apiBase || 'http://localhost:8000';
+
+const form = reactive({
+  name: '',
+  email: '',
+  phone: '',
+  message: ''
+});
+
+const loading = ref(false);
+const successMessage = ref('');
+const errorMessage = ref('');
+
+const handleSubmit = async () => {
+  loading.value = true;
+  errorMessage.value = '';
+  successMessage.value = '';
+
+  try {
+    const response = await axios.post(`${apiBaseUrl}/contact`, form, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    });
+
+    console.log(response.data);
+    
+    if (response.data.success) {
+      successMessage.value = response.data.message;
+      // Reset form
+      Object.keys(form).forEach(key => {
+        form[key] = '';
+      });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    if (error.response && error.response.data && error.response.data.errors) {
+      errorMessage.value = Object.values(error.response.data.errors).flat().join(' ');
+    } else {
+      errorMessage.value = 'An error occurred. Please try again later.';
+    }
+  } finally {
+    loading.value = false;
+  }
+};
 </script>
 
 <style scoped>

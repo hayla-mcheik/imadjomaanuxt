@@ -3,31 +3,12 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const { $api } = useNuxtApp();
   
   // Initialize auth state
-  if (process.client) {
-    const token = localStorage.getItem('auth_token');
-    if (token && !authStore.isAuthenticated) {
-      authStore.token = token;
-      authStore.isAuthenticated = true;
-      try {
-        await authStore.fetchUser($api);
-      } catch (error) {
-        authStore.$reset();
-        if (process.client) {
-          localStorage.removeItem('auth_token');
-        }
-      }
-    }
-  }
+  await authStore.initialize($api);
 
   // Protected admin routes
   if (to.path.startsWith('/admin') && !to.path.includes('/login')) {
     if (!authStore.isAuthenticated) {
       return navigateTo('/admin/login');
-    }
-    
-    // Verify user role
-    if (authStore.user?.role !== 'admin') {
-      return navigateTo('/');
     }
   }
 

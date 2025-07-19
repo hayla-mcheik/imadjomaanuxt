@@ -1,169 +1,113 @@
 <template>
-  <div class="milestones-section bg-gradient-to-b from-gray-900 to-black relative overflow-hidden">
-    <div class="container mx-auto max-w-7xl px-4 relative z-10">
-
-      <!-- Milestone Slider -->
-      <div class="milestone-slider relative">
-        <!-- Navigation Arrows -->
-        <button @click="prevSlide" class="absolute left-0 top-1/2 z-20 transform -translate-y-1/2 -translate-x-4 bg-black/70 hover:bg-red-600 rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        
-        <button @click="nextSlide" class="absolute right-0 top-1/2 z-20 transform -translate-y-1/2 translate-x-4 bg-black/70 hover:bg-red-600 rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-
-        <!-- Slides Container with Swipe Events -->
-        <div 
-          class="relative overflow-hidden h-[600px]"
-          @mousedown="startDrag"
-          @mousemove="onDrag"
-          @mouseup="endDrag"
-          @mouseleave="endDrag"
-          @touchstart="startDrag"
-          @touchmove="onDrag"
-          @touchend="endDrag"
-        >
-          <div 
-            class="flex h-full transition-transform duration-500 ease-in-out" 
-            :style="`transform: translateX(${getTranslateX()})`"
-            :class="{ 'transition-none': isDragging }"
+  <ClientOnly>
+    <div class="milestones-section bg-gradient-to-b from-gray-900 to-black relative overflow-hidden">
+      <div class="container mx-auto max-w-7xl px-4 relative z-10">
+        <!-- Milestone Slider -->
+        <div class="milestone-slider relative">
+          <!-- Navigation Arrows -->
+          <button 
+            @click="prevSlide" 
+            class="absolute left-0 top-1/2 z-20 transform -translate-y-1/2 -translate-x-4 bg-black/70 hover:bg-red-600 rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300"
+            aria-label="Previous milestone"
           >
-            <!-- Clone last slide for infinite loop -->
-            <div 
-              v-if="milestones.length > 1"
-              class="milestone-slide flex-shrink-0 w-full h-full relative px-0 transition-all duration-300"
-              :class="{
-                'active-slide': isActiveSlide(milestones.length - 1),
-                'inactive-slide': !isActiveSlide(milestones.length - 1)
-              }"
-            >
-              <div 
-                class="absolute inset-0 bg-cover bg-center transition-all duration-1000"
-                :style="{ backgroundImage: `url(${milestones[milestones.length - 1].image})` }"
-              >
-                <div 
-                  class="absolute inset-0 transition-all duration-700"
-                  :class="isActiveSlide(milestones.length - 1)
-                    ? 'bg-gradient-to-t from-black/50 to-black/20' 
-                    : 'bg-gradient-to-t from-black/90 to-black/60'"
-                ></div>
-              </div>
-              <div class="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-8">
-                <div class="milestone-date text-red-500 font-bold text-5xl mb-2 tracking-wide">
-                  {{ milestones[milestones.length - 1].date }}
-                </div>
-                <h3 class="text-white text-3xl md:text-4xl font-bold mb-6 max-w-3xl">
-                  {{ milestones[milestones.length - 1].title }}
-                </h3>
-                <p class="text-gray-300 text-lg md:text-lg max-w-2xl leading-relaxed">
-                  {{ milestones[milestones.length - 1].description }}
-                </p>
-              </div>
-            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          
+          <button 
+            @click="nextSlide" 
+            class="absolute right-0 top-1/2 z-20 transform -translate-y-1/2 translate-x-4 bg-black/70 hover:bg-red-600 rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300"
+            aria-label="Next milestone"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
 
-            <!-- Regular slides -->
+          <!-- Slides Container -->
+          <div 
+            class="relative overflow-hidden h-[600px]"
+            @mousedown="startDrag"
+            @mousemove="onDrag"
+            @mouseup="endDrag"
+            @mouseleave="endDrag"
+            @touchstart="startDrag"
+            @touchmove="onDrag"
+            @touchend="endDrag"
+          >
             <div 
-              v-for="(milestone, index) in milestones" 
-              :key="index"
-              class="milestone-slide flex-shrink-0 w-full h-full relative px-0 transition-all duration-300"
-              :class="{
-                'active-slide': isActiveSlide(index),
-                'inactive-slide': !isActiveSlide(index)
-              }"
+              class="flex h-full transition-transform duration-500 ease-in-out" 
+              :style="`transform: translateX(${translateX})`"
+              :class="{ 'transition-none': isDragging }"
             >
+              <!-- Slides -->
               <div 
-                class="absolute inset-0 bg-cover bg-center transition-all duration-1000"
-                :style="{ backgroundImage: `url(${milestone.image})` }"
+                v-for="(milestone, index) in visibleSlides" 
+                :key="index"
+                class="milestone-slide flex-shrink-0 w-full h-full relative px-0 transition-all duration-300"
+                :class="{
+                  'active-slide': isActiveSlide(index),
+                  'inactive-slide': !isActiveSlide(index)
+                }"
               >
                 <div 
-                  class="absolute inset-0 transition-all duration-700"
-                  :class="isActiveSlide(index)
-                    ? 'bg-gradient-to-t from-black/50 to-black/20' 
-                    : 'bg-gradient-to-t from-black/90 to-black/60'"
-                ></div>
-              </div>
-              <div class="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-8">
-                <div class="milestone-date text-red-500 font-bold text-5xl mb-2 tracking-wide">
-                  {{ milestone.date }}
+                  class="absolute inset-0 bg-cover bg-center transition-all duration-1000"
+                  :style="{ backgroundImage: `url(${milestone.image})` }"
+                >
+                  <div 
+                    class="absolute inset-0 transition-all duration-700"
+                    :class="isActiveSlide(index)
+                      ? 'bg-gradient-to-t from-black/50 to-black/20' 
+                      : 'bg-gradient-to-t from-black/90 to-black/60'"
+                  ></div>
                 </div>
-                <h3 class="text-white text-3xl md:text-4xl font-bold mb-6 max-w-3xl">
-                  {{ milestone.title }}
-                </h3>
-                <p class="text-gray-300 text-lg md:text-lg max-w-2xl leading-relaxed">
-                  {{ milestone.description }}
-                </p>
-              </div>
-            </div>
-
-            <!-- Clone first slide for infinite loop -->
-            <div 
-              v-if="milestones.length > 1"
-              class="milestone-slide flex-shrink-0 w-full h-full relative px-0 transition-all duration-300"
-              :class="{
-                'active-slide': isActiveSlide(0),
-                'inactive-slide': !isActiveSlide(0)
-              }"
-            >
-              <div 
-                class="absolute inset-0 bg-cover bg-center transition-all duration-1000"
-                :style="{ backgroundImage: `url(${milestones[0].image})` }"
-              >
-                <div 
-                  class="absolute inset-0 transition-all duration-700"
-                  :class="isActiveSlide(0)
-                    ? 'bg-gradient-to-t from-black/50 to-black/20' 
-                    : 'bg-gradient-to-t from-black/90 to-black/60'"
-                ></div>
-              </div>
-              <div class="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-8">
-                <div class="milestone-date text-red-500 font-bold text-5xl mb-2 tracking-wide">
-                  {{ milestones[0].date }}
+                <div class="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-8">
+                  <div class="milestone-date text-red-500 font-bold text-5xl mb-2 tracking-wide">
+                    {{ milestone.date }}
+                  </div>
+                  <h3 class="text-white text-3xl md:text-4xl font-bold mb-6 max-w-3xl">
+                    {{ milestone.title }}
+                  </h3>
+                  <p class="text-gray-300 text-lg md:text-lg max-w-2xl leading-relaxed">
+                    {{ milestone.description }}
+                  </p>
                 </div>
-                <h3 class="text-white text-3xl md:text-4xl font-bold mb-6 max-w-3xl">
-                  {{ milestones[0].title }}
-                </h3>
-                <p class="text-gray-300 text-lg md:text-lg max-w-2xl leading-relaxed">
-                  {{ milestones[0].description }}
-                </p>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Timeline Points -->
-        <div class="timeline-points flex justify-center mt-8 space-x-8">
-          <button 
-            v-for="(milestone, index) in milestones" 
-            :key="index"
-            @click="goToSlide(index)"
-            :class="[
-              'relative flex flex-col items-center',
-              currentIndex === index ? 'text-red-500' : 'text-gray-400'
-            ]"
-          >
-            <div 
-              class="w-6 h-6 rounded-full border-2 mb-2 flex items-center justify-center transition-all"
-              :class="currentIndex === index ? 'border-red-500 bg-red-500/20' : 'border-gray-500'"
+          <!-- Timeline Points -->
+          <div class="timeline-points flex justify-center mt-8 space-x-8">
+            <button 
+              v-for="(milestone, index) in milestones" 
+              :key="index"
+              @click="goToSlide(index)"
+              :class="[
+                'relative flex flex-col items-center',
+                currentIndex === index ? 'text-red-500' : 'text-gray-400'
+              ]"
+              :aria-label="`Go to milestone ${index + 1}`"
             >
               <div 
-                v-if="currentIndex === index" 
-                class="w-3 h-3 rounded-full bg-red-500"
-              ></div>
-            </div>
-          </button>
+                class="w-6 h-6 rounded-full border-2 mb-2 flex items-center justify-center transition-all"
+                :class="currentIndex === index ? 'border-red-500 bg-red-500/20' : 'border-gray-500'"
+              >
+                <div 
+                  v-if="currentIndex === index" 
+                  class="w-3 h-3 rounded-full bg-red-500"
+                ></div>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Decorative Elements -->
-    <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-red-900/10 to-transparent"></div>
-    <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-red-900/10 to-transparent"></div>
-  </div>
+      <!-- Decorative Elements -->
+      <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-red-900/10 to-transparent"></div>
+      <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-red-900/10 to-transparent"></div>
+    </div>
+  </ClientOnly>
 </template>
 
 <script setup>
@@ -182,31 +126,31 @@ const milestones = ref([
   {
     date: '2010',
     title: 'Company Founded',
-    description: 'Our journey began in a small garage with a vision to revolutionize the industry. We started with just three employees and a dream.',
+    description: 'Our journey began in a small garage with a vision to revolutionize the industry.',
     image: imageUrls[0]
   },
   {
     date: '2013',
     title: 'First Major Product Launch',
-    description: 'After three years of research and development, we launched our flagship product that changed how people interact with technology.',
+    description: 'After three years of research, we launched our flagship product.',
     image: imageUrls[1]
   },
   {
     date: '2016',
     title: 'International Expansion',
-    description: 'We opened offices in three new countries, establishing our global presence and serving clients across continents.',
+    description: 'We opened offices in three new countries, establishing our global presence.',
     image: imageUrls[2]
   },
   {
     date: '2019',
     title: 'Acquisition of Tech Innovations',
-    description: 'We acquired a leading tech company, expanding our capabilities and bringing innovative solutions to our customers.',
+    description: 'We acquired a leading tech company, expanding our capabilities.',
     image: imageUrls[3]
   },
   {
     date: '2023',
     title: 'Global Recognition Award',
-    description: 'Our work received international recognition with the prestigious Global Innovation Award for technological excellence.',
+    description: 'Our work received international recognition with the Global Innovation Award.',
     image: imageUrls[4]
   }
 ]);
@@ -215,23 +159,35 @@ const currentIndex = ref(0);
 const isDragging = ref(false);
 const startX = ref(0);
 const dragOffset = ref(0);
+const windowWidth = ref(0);
 let autoSlideInterval = null;
 let isTransitioning = ref(false);
 
-// For infinite loop, we add clones at both ends
-const totalSlides = computed(() => milestones.value.length + 2);
+// Computed properties
+const visibleSlides = computed(() => {
+  // For infinite loop effect
+  return [
+    milestones.value[milestones.value.length - 1], // Last slide clone
+    ...milestones.value, // All regular slides
+    milestones.value[0] // First slide clone
+  ];
+});
 
+const translateX = computed(() => {
+  if (windowWidth.value === 0) return '0%'; // SSR fallback
+  
+  // Calculate offset based on window width
+  const offset = isDragging.value ? dragOffset.value : 0;
+  
+  if (windowWidth.value < 768) {
+    return `calc(${-currentIndex.value * 100}% + ${offset}px)`;
+  }
+  return `calc(${-currentIndex.value * (100 / 1.5)}% + ${offset}px)`;
+});
+
+// Methods
 const isActiveSlide = (index) => {
   return currentIndex.value === index;
-};
-
-const getTranslateX = () => {
-  // For mobile, we show full slides
-  if (window.innerWidth < 768) {
-    return `calc(${-currentIndex.value * 100}% + ${dragOffset.value}px)`;
-  }
-  // For desktop, we center the active slide
-  return `calc(${-currentIndex.value * (100 / 1.5)}% + ${dragOffset.value}px)`;
 };
 
 const nextSlide = () => {
@@ -242,7 +198,7 @@ const nextSlide = () => {
   
   setTimeout(() => {
     isTransitioning.value = false;
-  }, 500); // Match this with your transition duration
+  }, 500);
 };
 
 const prevSlide = () => {
@@ -294,7 +250,7 @@ const endDrag = () => {
   if (!isDragging.value) return;
   
   isDragging.value = false;
-  const threshold = 50; // Reduced threshold for better mobile experience
+  const threshold = 50;
   
   if (dragOffset.value > threshold) {
     prevSlide();
@@ -305,16 +261,21 @@ const endDrag = () => {
   dragOffset.value = 0;
 };
 
+// Lifecycle hooks
 onMounted(() => {
+  windowWidth.value = window.innerWidth;
   resetAutoSlide();
-  // Handle window resize for responsive behavior
-  window.addEventListener('resize', () => {
-    // Force update the translateX calculation
+  
+  const handleResize = () => {
+    windowWidth.value = window.innerWidth;
+  };
+  
+  window.addEventListener('resize', handleResize);
+  
+  onBeforeUnmount(() => {
+    clearInterval(autoSlideInterval);
+    window.removeEventListener('resize', handleResize);
   });
-});
-
-onBeforeUnmount(() => {
-  clearInterval(autoSlideInterval);
 });
 </script>
 
@@ -446,10 +407,6 @@ onBeforeUnmount(() => {
   
   p {
     font-size: 1rem;
-  }
-  
-  .timeline-points button span {
-    font-size: 0.8rem;
   }
 }
 

@@ -1,27 +1,25 @@
 <template>
     <!-- Page Header Start -->
-    <div class="page-header bg-section dark-section">
+    <div class="page-header bg-section dark-section" :style="{'background-image' : `url(${mediaBase}/${image})`}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
               <div class="relative z-1 mx-auto px-4">
-        <h1 class="text-3xl md:text-4xl font-bold mb-6 font-montserrat">Imad Jomaa's Story</h1>
+                <p class="mb-0"><span class="quote-story">”</span></p>
+        <!-- <h1 class="text-3xl md:text-4xl font-bold mb-6 font-montserrat">Imad Jomaa's Story</h1> -->
+        <h2 class="max-w-3xl text-2xl md:text-3xl  mb-6 font-montserrat italic">Real growth happens when we challenge limits, connect markets, and build solutions the future hasn’t asked for yet.”
+, Imad Jomaa</h2>
         <div class="max-w-3xl mt-4">
           <blockquote class="text-lg md:text-lg font-medium">
-        Imad Jomaa is a pioneering entrepreneur, investor, and the Founder and President of JGroup, a diversified business group at the forefront of media, advertising, and technology in the MENA region. Since founding the company in 2003, Imad has led JGroup’s transformation from a Beirut-based operation into an internationally recognized ecosystem of subsidiaries, including Promofix, Promomedia, Optiview, and WMS.
+<p>Founder & President, <span class="text-red font-bold text-lg italic">JGroup</span></p>
 
-Imad holds a Master’s degree in Financial Economics and dual Bachelor’s degrees in Economics and Chemistry from the American University of Beirut (AUB), where he graduated as class valedictorian. Armed with academic excellence and market foresight, he quickly built a reputation for spotting emerging trends and creating opportunities, long before they became mainstream.
+<p><span class="text-red font-bold text-lg italic">Imad Jomaa</span> is a pioneering entrepreneur, investor, and the Founder and President of <span class="text-red font-bold text-lg">JGroup</span>, a diversified business group at the forefront of media, advertising, and technology across the MENA region. Under his leadership, JGroup has built a reputation as a trusted partner for global tech and ad-tech leaders, including Google, TikTok, Snap, Amazon, and Channel Factory.</p>
 
-Over the past two decades, Imad has positioned JGroup as a regional pioneer in every new wave of innovation, from performance marketing and data-driven media to AI, Web3, and immersive technologies. Under his leadership, JGroup has secured strategic partnerships with global tech giants and ad-tech leaders such as Google, TikTok, Snap, Blis, Criteo, Crimtan, Channel Factory, Amazon, iHeart, and others, powering regional growth through global collaboration.
+<p>Driven by a forward-looking approach, deep regional expertise, and a strong commercial mindset, <span class="text-red font-bold text-lg italic">Imad</span> has positioned <span class="text-red font-bold text-lg italic">JGroup</span> as a catalyst for growth in the digital economy, empowering businesses through strategic partnerships and the development of proprietary, state-of-the-art technologies.</p>
 
-While JGroup was proudly founded in Lebanon, the company’s regional headquarters has grown to become based in the UAE, reflecting its expanding footprint and future-focused positioning across the Middle East and beyond.
-
-In addition to his corporate leadership, Imad actively represents Lebanese investors in key international economic forums, where he contributes to shaping policies and partnerships that promote collaborative economic growth for the Middle East and beyond.
-
-Imad continues to lead JGroup’s strategic expansion into high-growth verticals and markets, with a focus on innovation, data, and performance. His forward-looking approach, combined with a strong commercial mindset and deep regional expertise, has positioned JGroup as a trusted partner for global platforms and a catalyst for transformation in the digital economy.
+<p>Through his vision, <span class="text-red font-bold text-lg italic">JGroup</span> continues to shape the future of the industry, fueling innovation and driving meaningful impact across the region.</p>
           </blockquote>
-          <p>“Real growth happens when we challenge limits, connect markets, and build solutions the future hasn’t asked for yet.”
-— Imad Jomaa</p>
+   
      
         </div>
         
@@ -32,6 +30,44 @@ Imad continues to lead JGroup’s strategic expansion into high-growth verticals
     </div>
 </template>
 
-<script setup>
 
+
+<script setup>
+import axios from 'axios';
+const authStore = useAuthStore();
+import { ref, onMounted } from 'vue';
+// API base URL - configure this in your nuxt.config.js
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.apiBase || 'http://127.0.0.1:8000';
+const mediaBase = runtimeConfig.public.mediaBase || 'http://127.0.0.1:8000';
+const aboutContent = ref('');
+const image = ref('');
+
+onMounted(async () => {
+  try {
+      const response = await axios.get(`${apiBaseUrl}/about-data`,{
+      headers: {
+        Authorization: `Bearer ${authStore.token}`
+      }
+    });
+    console.log(response);
+
+    if (response) {
+      aboutContent.value = response.data.about.description;
+      image.value = response.data.about.image;
+      
+    }
+  } catch (error) {
+    console.error('Error fetching about data:', error);
+
+  }
+});
 </script>
+<style scoped>
+.quote-story{
+  font-size: 110px;
+    line-height: 110px;
+    margin-bottom: -30px;
+    color:white;
+}
+</style>

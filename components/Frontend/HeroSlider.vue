@@ -1,6 +1,6 @@
 <template>
   <!-- Hero Section Start-->
-  <div class="hero relative overflow-hidden pt-md-5" >
+  <div class="hero relative overflow-hidden pt-md-0"  :style="{'background-image' : `url(${mediaBase}/${image})`}">
     <!-- Video Background -->
     <div class="hero-bg-video absolute inset-0 z-0 ">
       <!-- <video autoplay muted loop class="w-full h-full object-cover">
@@ -16,8 +16,8 @@
         <div class="lg:col-span-7 pt-md-5">
           <!-- Section Title -->
       <div class="section-title">
-                            <h1 class="text-anime-style-2" data-cursor="-opaque">Imad Jomaa | <span>Visionary Entrepreneur, Regional Leader,Global Connector</span></h1>
-                            <p>Imad Jomaa is a transformative business leader and the Founder and President of JGroup, a powerhouse at the crossroads of media, technology, and investment across the MENA region. With a bold vision and unmatched market foresight, he has built JGroup into a platform of global partnerships, regional influence, and digital innovation. As a strategic voice in international economic forums and a catalyst for growth across high-impact sectors, Imad is shaping the future of business in the Middle East and beyond.</p>
+                            <h1 class="text-anime-style-2 italic" data-cursor="-opaque"><span>{{ title }}</span></h1>
+                            <p>{{ content }}</p>
                         </div>
 
    
@@ -54,30 +54,44 @@
   <!-- Hero Section End-->
 </template>
 
-<script setup>
-import { onMounted } from 'vue';
 
-onMounted(() => {
-  // Initialize animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-visible');
+<script setup>
+import axios from 'axios';
+const authStore = useAuthStore();
+import { ref, onMounted } from 'vue';
+// API base URL - configure this in your nuxt.config.js
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.apiBase || 'http://127.0.0.1:8000';
+const mediaBase = runtimeConfig.public.mediaBase || 'http://127.0.0.1:8000';
+const title = ref('');
+const content = ref('');
+const image = ref('');
+
+onMounted(async () => {
+  try {
+      const response = await axios.get(`${apiBaseUrl}/hero`,{
+      headers: {
+        Authorization: `Bearer ${authStore.token}`
       }
     });
-  });
-  
-  document.querySelectorAll('.animate-fade-in-down, .animate-fade-in, .animate-fade-in-up').forEach(el => {
-    observer.observe(el);
-  });
+    console.log(response);
+
+    if (response) {
+      title.value = response.data.hero.title;
+      content.value = response.data.hero.description;
+      image.value = response.data.hero.image;
+      
+    }
+  } catch (error) {
+    console.error('Error fetching hero data:', error);
+
+  }
 });
 </script>
 
+
 <style scoped>
 .hero {
-  height: 80vh;
-  min-height: 600px;
-  background-image: url('../assets/images/38.jpg');
   background-size: cover;
   background-repeat: no-repeat;
 }
